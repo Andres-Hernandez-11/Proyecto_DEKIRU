@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Clientes - ERP Rápidos del Altiplano</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa; /* Un fondo claro */
+        }
+        .container {
+            max-width: 960px; /* Ancho máximo para el contenido */
+        }
+        .card {
+            margin-bottom: 2rem;
+        }
+        /* Estilo para simular la apariencia del login si se desea */
+        /* .card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        } */
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+
+        <h1 class="mb-4">Gestión de Clientes</h1>
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Agregar Nuevo Cliente</h5>
+            </div>
+            <div class="card-body">
+                <form id="formAgregarCliente" action="php/procesar_cliente.php?accion=agregar" method="POST">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="nombre_razon_social" class="form-label">Nombre o Razón Social <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="nombre_razon_social" name="nombre_razon_social" required>
+                             </div>
+                        <div class="col-md-6">
+                            <label for="contacto_principal" class="form-label">Nombre Contacto Principal</label>
+                            <input type="text" class="form-control" id="contacto_principal" name="contacto_principal">
+                            </div>
+                        <div class="col-md-6">
+                            <label for="telefono" class="form-label">Teléfono <span class="text-danger">*</span></label>
+                            <input type="tel" class="form-control" id="telefono" name="telefono" required>
+                             </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Correo Electrónico <span class="text-danger">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                            </div>
+                        <div class="col-12">
+                            <label for="direccion" class="form-label">Dirección</label>
+                            <input type="text" class="form-control" id="direccion" name="direccion">
+                             </div>
+                        <div class="col-md-6">
+                             <label for="tipo_cliente" class="form-label">Tipo de Cliente</label>
+                             <select class="form-select" id="tipo_cliente" name="tipo_cliente">
+                                 <option value="" selected>-- Seleccione --</option>
+                                 <option value="persona_natural">Persona Natural</option>
+                                 <option value="empresa">Empresa</option>
+                                 <option value="corporativo">Corporativo</option>
+                             </select>
+                              </div>
+                        <div class="col-12 mt-4">
+                            <button type="submit" class="btn btn-primary">Guardar Cliente</button>
+                             </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Listado de Clientes</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <form action="clientes.html" method="GET"> <div class="input-group">
+                             <input type="text" class="form-control" placeholder="Buscar por nombre, ID, etc." name="q" aria-label="Buscar cliente">
+                             <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                             <a href="clientes.html" class="btn btn-outline-secondary">Limpiar</a>
+                         </div>
+                         </form>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre / Razón Social</th>
+                                <th>Teléfono</th>
+                                <th>Email</th>
+                                <th>Tipo</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Juan Pérez</td>
+                                <td>3101234567</td>
+                                <td>juan.perez@email.com</td>
+                                <td>Persona Natural</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" title="Ver Detalle" onclick="verDetalleCliente(1)">Detalle</button>
+                                    <button class="btn btn-sm btn-warning" title="Modificar" onclick="modificarCliente(1)">Modificar</button>
+                                     <button class="btn btn-sm btn-danger" title="Eliminar" onclick="eliminarCliente(1)">Eliminar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Empresa XYZ S.A.S</td>
+                                <td>6019876543</td>
+                                <td>contacto@xyz.com</td>
+                                <td>Empresa</td>
+                                <td>
+                                    <button class="btn btn-sm btn-info" title="Ver Detalle" onclick="verDetalleCliente(2)">Detalle</button>
+                                    <button class="btn btn-sm btn-warning" title="Modificar" onclick="modificarCliente(2)">Modificar</button>
+                                    <button class="btn btn-sm btn-danger" title="Eliminar" onclick="eliminarCliente(2)">Eliminar</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                    </table>
+                </div>
+                 </div>
+        </div>
+    </div>
+
+     <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+       <div class="modal-dialog">
+         <div class="modal-content">
+           <div class="modal-header">
+             <h5 class="modal-title" id="exampleModalLabel">Confirmar Eliminación</h5>
+             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+           </div>
+           <div class="modal-body">
+             ¿Estás seguro de que deseas eliminar/desactivar a este cliente? <span id="clienteAEliminarNombre"></span>
+             <p class="small text-muted" id="eliminarAdvertenciaAsociados" style="display:none;">Este cliente tiene registros asociados y no puede ser eliminado físicamente. Será marcado como inactivo.</p>
+           </div>
+           <div class="modal-footer">
+             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-danger" id="btnConfirmarEliminacion">Confirmar Eliminación</button>
+           </div>
+         </div>
+       </div>
+     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Funciones JS básicas de ejemplo para los botones de acción
+        // En una implementación real, esto sería más complejo:
+        // - Modificar cargaría datos en un formulario (quizás en un modal).
+        // - Eliminar mostraría el modal de confirmación y manejaría la llamada al backend.
+        // - Detalle mostraría toda la información del cliente (en un modal o sección aparte).
+
+        const confirmarEliminarModal = new bootstrap.Modal(document.getElementById('confirmarEliminarModal'));
+        let clienteIdParaEliminar = null;
+
+        function verDetalleCliente(clienteId) {
+            console.log("Ver detalle del cliente ID:", clienteId);
+            // Aquí iría la lógica para cargar y mostrar los detalles completos
+            alert("Mostrando detalles del cliente ID: " + clienteId + "\n(Implementación pendiente)");
+        }
+
+        function modificarCliente(clienteId) {
+            console.log("Modificar cliente ID:", clienteId);
+            // Redirigir a un formulario de modificación pre-llenado
+            // window.location.href = `modificar_cliente.php?id=${clienteId}`;
+             alert("Redirigiendo para modificar cliente ID: " + clienteId + "\n(Implementación pendiente)");
+        }
+
+        function eliminarCliente(clienteId) {
+            console.log("Intentando eliminar cliente ID:", clienteId);
+            clienteIdParaEliminar = clienteId;
+            // Simular obtención del nombre y si tiene asociados (esto vendría del backend o de atributos data-* en la tabla)
+            const nombreCliente = `Cliente #${clienteId}`; // Reemplazar con nombre real
+            const tieneAsociados = (clienteId === 2); // Simular que el cliente 2 tiene asociados
+
+             document.getElementById('clienteAEliminarNombre').textContent = `(${nombreCliente})`;
+
+             if (tieneAsociados) {
+                 // HU10-CA3 y CA4: Mostrar advertencia de eliminación lógica
+                 document.getElementById('eliminarAdvertenciaAsociados').style.display = 'block';
+                 document.getElementById('btnConfirmarEliminacion').textContent = 'Confirmar Desactivación';
+             } else {
+                 document.getElementById('eliminarAdvertenciaAsociados').style.display = 'none';
+                 document.getElementById('btnConfirmarEliminacion').textContent = 'Confirmar Eliminación';
+             }
+
+             // HU10-CA2: Mostrar modal de confirmación
+            confirmarEliminarModal.show();
+        }
+
+         document.getElementById('btnConfirmarEliminacion').addEventListener('click', function() {
+            if (clienteIdParaEliminar !== null) {
+                console.log("Confirmado eliminar/desactivar cliente ID:", clienteIdParaEliminar);
+                // Aquí iría la llamada al backend (PHP) para realizar la acción
+                // Ejemplo: window.location.href = `php/procesar_cliente.php?accion=eliminar&id=${clienteIdParaEliminar}`;
+
+                alert("Acción de eliminar/desactivar enviada para Cliente ID: " + clienteIdParaEliminar + "\n(Implementación backend pendiente)");
+
+                confirmarEliminarModal.hide();
+                // Opcional: Recargar la lista o eliminar la fila de la tabla con JS después de confirmar éxito del backend
+            }
+         });
+
+         // Limpiar ID al cerrar modal
+         document.getElementById('confirmarEliminarModal').addEventListener('hidden.bs.modal', function (event) {
+             clienteIdParaEliminar = null;
+         })
+
+         // Mensaje de éxito/error (ejemplo simple post-submit, usualmente manejado por backend)
+         document.addEventListener('DOMContentLoaded', (event) => {
+             const params = new URLSearchParams(window.location.search);
+             if (params.has('status')) {
+                 const status = params.get('status');
+                 const message = params.get('message') || 'Acción completada.';
+                 const alertType = status === 'success' ? 'alert-success' : 'alert-danger';
+                 const alertHtml = `<div class="alert ${alertType} alert-dismissible fade show" role="alert">
+                                     ${decodeURIComponent(message)}
+                                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                   </div>`;
+                 // Insertar alerta al principio del container (o donde prefieras)
+                 document.querySelector('.container').insertAdjacentHTML('afterbegin', alertHtml);
+                 // Limpiar URL (opcional)
+                 // window.history.replaceState({}, document.title, window.location.pathname);
+             }
+         });
+
+    </script>
+
+</body>
+</html>
