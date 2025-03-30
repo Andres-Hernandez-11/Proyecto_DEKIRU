@@ -3,26 +3,119 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - ERP Rápidos del Altiplano</title>
-  <link rel="icon" type="image/png" href="/IMAGENES/IconoWeb.png">
-  <link rel="stylesheet" href="/LOGICA/CSS/EstilosLogin.css">
+  <title>Login/Registro - ERP Rápidos del Altiplano</title>
+  <link rel="icon" type="image/png" href="../../IMAGENES/IconoWeb.png">
+  <link rel="stylesheet" href="../CSS/EstilosLogin.css">
+  
 </head>
 <body>
-<div class="logos" style="text-align: center;">
-  <img src="/IMAGENES/LogoRapidosDelAltiplano.jpg" alt="Rápidos del Altiplano" class="logo">
-  <div class="divider"></div>
-  <img src="/IMAGENES/Logodekiru.jpg" alt="Dekiru" class="logo dekiru">
-</div>
-<div class="container">
-  <h2>Log In</h2>
-  <input type="text" placeholder="Email Address" class="input-field">
-  <input type="password" placeholder="Password" class="input-field">
-  <div class="remember-me">
-    <input type="checkbox" id="remember">
-    <label for="remember">Remember me</label>
-  </div>
-  <button class="btn">Log In</button>
-  <div class="forgot-password">Forgot your password?</div>
-</div>
+ <div class="main-content-wrapper">
+
+    <div class="logos" style="text-align: center;">
+      <img src="../../IMAGENES/LogoRapidosDelAltiplano.jpg" alt="Rápidos del Altiplano" class="logo">
+      <div class="divider"></div>
+      <img src="../../IMAGENES/Logodekiru.jpg" alt="Dekiru" class="logo dekiru">
+    </div>
+
+    <main class="contenedor__todo">
+
+        <div class="columna-izquierda">
+            <div class="caja__trasera-login">
+                <h3>¿Ya tienes una cuenta?</h3>
+                <p>Inicia sesión para entrar en la página</p>
+                <button id="btn__iniciar-sesion">Iniciar Sesión</button>
+            </div>
+            <div class="caja__trasera-register">
+                <h3>¿Aún no tienes una cuenta?</h3>
+                <p>Regístrate para que puedas iniciar sesión</p>
+                <button id="btn__registrarse">Registrarse</button>
+            </div>
+        </div>
+
+        <div class="columna-derecha">
+            <div class="contenedor__login-register">
+                <form action="login-register/php/login_usuario_be.php" method="POST" class="formulario__login formulario__activo">
+                    <h2>Iniciar Sesión</h2>
+                    <input type="text" placeholder="Correo electrónico" name="correo" required>
+                    <input type="password" placeholder="Contraseña" name="contrasena" required>
+                    <div style="display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: white; margin: 10px 5px;">
+                        <div class="remember-me" style="display:flex; align-items:center;">
+                           <input type="checkbox" id="remember" name="remember" style="width:auto; margin-right: 5px;">
+                           <label for="remember">Recuérdame</label>
+                        </div>
+                        <div class="forgot-password">
+                           <a href="#" style="color: white; font-size: 13px;">¿Olvidaste tu contraseña?</a>
+                        </div>
+                    </div>
+                    <button type="submit">Entrar</button>
+                </form>
+
+                <form action="login-register/php/registro_usuario_be.php" method="POST" class="formulario__register">
+                    <h2>Registrarse</h2>
+                    <input type="text" placeholder="Nombre completo" name="nombre_completo" required>
+                    <input type="text" placeholder="Correo electrónico" name="correo" required>
+                    <input type="text" placeholder="Usuario" name="usuario" required>
+                    <input type="password" placeholder="Contraseña" name="contrasena" required>
+                    <button type="submit">Registrarse</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+ </div> <script>
+        const btnIniciarSesion = document.getElementById("btn__iniciar-sesion");
+        const btnRegistrarse = document.getElementById("btn__registrarse");
+        const formularioLogin = document.querySelector(".formulario__login");
+        const formularioRegister = document.querySelector(".formulario__register");
+        const contenedorLoginRegister = document.querySelector(".contenedor__login-register"); // Necesario para ajustar en móvil si hay animaciones
+
+        // Función para mostrar Login
+        function mostrarLogin() {
+            if (window.innerWidth > 768) { // Lógica de escritorio
+                 formularioRegister.classList.remove("formulario__activo");
+                 formularioLogin.classList.add("formulario__activo");
+                 // Podrías añadir clases para animaciones aquí
+            } else { // Lógica móvil (si botones de toggle están visibles)
+                 formularioRegister.style.display = "none";
+                 formularioLogin.style.display = "block";
+            }
+        }
+
+        // Función para mostrar Registro
+        function mostrarRegistro() {
+            if (window.innerWidth > 768) { // Lógica de escritorio
+                 formularioLogin.classList.remove("formulario__activo");
+                 formularioRegister.classList.add("formulario__activo");
+                  // Podrías añadir clases para animaciones aquí
+            } else { // Lógica móvil (si botones de toggle están visibles)
+                formularioLogin.style.display = "none";
+                formularioRegister.style.display = "block";
+            }
+        }
+
+        // Event Listeners para los botones
+        if(btnIniciarSesion) btnIniciarSesion.addEventListener("click", mostrarLogin);
+        if(btnRegistrarse) btnRegistrarse.addEventListener("click", mostrarRegistro);
+
+        // Estado inicial (Mostrar Login al cargar la página)
+         function ajustarVistaInicial() {
+             if (window.innerWidth <= 768) {
+                 // En móvil, asegurar que solo login se muestre inicialmente si los botones de toggle se ocultan
+                 if (formularioLogin) formularioLogin.style.display = "block";
+                 if (formularioRegister) formularioRegister.style.display = "none";
+                 // Ocultar los botones de la columna izquierda si se decide
+                 // document.querySelector('.columna-izquierda').style.display = 'none';
+             } else {
+                 // En escritorio, usar la lógica de clases activas
+                 mostrarLogin();
+             }
+         }
+
+         document.addEventListener('DOMContentLoaded', ajustarVistaInicial);
+         window.addEventListener('resize', ajustarVistaInicial); // Ajustar si cambia tamaño de ventana
+
+    </script>
+
 </body>
 </html>
