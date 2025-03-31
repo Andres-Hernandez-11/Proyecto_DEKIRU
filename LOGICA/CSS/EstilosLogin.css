@@ -1,361 +1,100 @@
-
-    /* === Estilos Globales y Reset === */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      height: 100%;
-    }
-
-    /* === Estilo del Body (Fondo Fijo) === */
-    body {
-      background: url('../../IMAGENES/FondoLogin.jpg') no-repeat center center fixed; /* Reemplaza con tu imagen de fondo real si es diferente */
-      background-size: cover;
-      min-height: 100vh;
-      height: 100vh;
-      overflow: hidden; /* Previene scroll en BODY */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-family: 'Poppins', Arial, sans-serif; /* Nueva Fuente */
-      position: relative;
-      color: #fff; /* Color de texto por defecto */
-    }
-
-    /* === Wrapper Principal para Contenido === */
-    .main-content-wrapper {
-        width: 100%;
-        max-width: 950px; /* Ligeramente más ancho */
-        padding: 20px;
-        overflow-y: auto; /* Scroll SOLO aquí si es necesario */
-        margin-top: 20px; /* Reducir espacio arriba */
-        display: flex;
-        flex-direction: column; /* Apilar logos y contenedor */
-        align-items: center;
-        flex-grow: 1;
-    }
-
-
-    /* === Estilos Logos === */
-    .logos {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 25px; /* Un poco más de espacio */
-      margin-bottom: 25px;
-      width: 100%;
-      padding: 0 20px;
-    }
-    .logo {
-      /* Ajustar tamaño si es necesario para parecerse a la imagen */
-      width: 160px;
-      height: auto;
-      max-width: 35%;
-    }
-    .logo.dekiru {
-      width: 180px;
-      max-width: 40%;
-    }
-    .divider {
-      width: 1.5px; /* Más delgado */
-      height: 80px; /* Más corto */
-      background-color: rgba(255, 255, 255, 0.7); /* Menos opaco */
-    }
-
-    /* === Estructura LADO A LADO === */
-    .contenedor__todo {
-        display: flex;
-        width: 100%;
-        background: none; /* Sin fondo aquí, lo tendrán las columnas/formularios */
-        border-radius: 10px; /* Redondez más sutil */
-        overflow: hidden;
-        box-shadow: none; /* Sin sombra aquí */
-        margin-top: auto;
-        margin-bottom: auto;
-    }
-
-    /* Columna Izquierda */
-    .columna-izquierda {
-        flex-basis: 50%; /* Ajustar proporción si es necesario */
-        padding: 50px 40px;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        color: white;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.4); /* Sombra para legibilidad */
-         /* Background semi-transparente opcional para contraste */
-        /* background: rgba(0, 0, 0, 0.2);
-        backdrop-filter: blur(5px);
-        border-radius: 10px 0 0 10px; */
-    }
-
-    .columna-izquierda h3 {
-        font-size: 1.8em; /* Más grande */
-        margin-bottom: 15px;
-        font-weight: 600; /* Más grueso */
-    }
-
-    .columna-izquierda p {
-        font-size: 1em; /* Ligeramente más grande */
-        line-height: 1.5;
-        margin-bottom: 25px;
-        font-weight: 300; /* Más ligero */
-    }
-
-    .caja__trasera-login,
-    .caja__trasera-register {
-         margin-bottom: 40px;
-    }
-     .caja__trasera-register {
-         margin-bottom: 0;
-     }
-
-    /* Columna Derecha */
-    .columna-derecha {
-        flex-basis: 50%;
-        position: relative;
-        min-height: 500px; /* Un poco más alta */
-        display: flex;
-        align-items: center;
-        justify-content: center; /* Centrar el contenedor del formulario */
-        /* background: rgba(10, 10, 20, 0.1); /* Fondo oscuro muy sutil si es necesario */
-    }
-
-    /* Contenedor interno de los formularios */
-    .contenedor__login-register {
-        width: 100%;
-        max-width: 400px; /* Ancho máximo del área del formulario */
-        padding: 0 15px; /* Padding lateral dentro de la columna */
-    }
-
-    /* Formularios Login y Registro */
-    .formulario__login,
-    .formulario__register {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 100%; /* Ocupa el ancho de .contenedor__login-register */
-        padding: 40px 30px; /* Más padding interno */
-        background: rgba(255, 255, 255, 0.1); /* Blanco más sutil */
-        backdrop-filter: blur(15px); /* Más blur */
-        border: 1px solid rgba(255, 255, 255, 0.1); /* Borde sutil */
-        border-radius: 8px;
-        box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
-        opacity: 0;
-        visibility: hidden;
-        z-index: 1;
-        transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
-    }
-
-     .formulario__activo {
-         opacity: 1;
-         visibility: visible;
-         z-index: 2;
-     }
-
-    .formulario__login h2,
-    .formulario__register h2 {
-        margin-bottom: 30px; /* Más espacio bajo el título */
-        font-weight: 600;
-        font-size: 1.9em; /* Título más grande */
-        color: white;
-        text-align: center;
-        text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
-    }
-
-    /* Inputs */
-    .formulario__login input[type="text"],
-    .formulario__login input[type="password"],
-    .formulario__register input[type="text"],
-    .formulario__register input[type="password"] {
-      width: 100%; /* Ocupar todo el ancho */
-      padding: 14px 18px; /* Más padding vertical */
-      margin: 15px auto; /* Más margen vertical */
-      border: none; /* Sin borde */
-      border-bottom: 1px solid rgba(255, 255, 255, 0.4); /* Solo línea inferior */
-      border-radius: 4px; /* Redondez ligera */
-      font-size: 1em;
-      text-align: left; /* Texto alineado a la izquierda */
-      display: block;
-      background: rgba(255, 255, 255, 0.15); /* Fondo interno más sutil */
-      color: #fff; /* Texto blanco */
-      transition: border-bottom-color 0.3s ease, background-color 0.3s ease;
-    }
-     .formulario__login input:focus,
-     .formulario__register input:focus {
-         outline: none;
-         border-bottom-color: #6fa0ff; /* Color al enfocar */
-         background: rgba(255, 255, 255, 0.2);
-     }
-
-     /* Placeholder color */
-     ::placeholder {
-        color: rgba(255, 255, 255, 0.6); /* Placeholder más claro */
-        opacity: 1;
-      }
-     :-ms-input-placeholder {
-        color: rgba(255, 255, 255, 0.6);
-     }
-     ::-ms-input-placeholder {
-        color: rgba(255, 255, 255, 0.6);
-     }
-
-    /* Botones */
-    .columna-izquierda button { /* Botones de toggle */
-        background: rgba(255, 255, 255, 0.2); /* Fondo blanco semi-transparente */
-        color: white;
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        padding: 8px 25px; /* Menos padding vertical, más horizontal */
-        min-width: 140px;
-        cursor: pointer;
-        border-radius: 20px; /* Más redondeados */
-        font-size: 0.9em;
-        font-weight: 500;
-        display: inline-block;
-        margin-top: 10px;
-        transition: background 0.3s ease, color 0.3s ease;
-        backdrop-filter: blur(5px);
-    }
-     .columna-izquierda button:hover {
-         background: rgba(255, 255, 255, 0.9);
-         color: #1E3BCC;
-     }
-
-    /* Botones de formulario (Entrar/Registrarse) */
-     .formulario__login button,
-     .formulario__register button {
-         background: #3a79ff; /* Azul más vibrante */
-         color: white;
-         border: none;
-         padding: 12px;
-         width: 100%;
-         cursor: pointer;
-         border-radius: 5px;
-         font-size: 1.05em; /* Ligeramente más grande */
-         font-weight: 600;
-         display: block; /* Asegurar que ocupe el ancho */
-         margin-top: 25px; /* Más espacio arriba */
-         transition: background 0.3s ease;
-         letter-spacing: 0.5px; /* Espacio entre letras */
-         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-     }
-
-    .formulario__login button:hover,
-    .formulario__register button:hover {
-      background: #2d67e0; /* Azul un poco más oscuro al hover */
-    }
-
-    /* Estilos para "Recuérdame" y "Olvidaste contraseña" */
-    .opciones-login {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 0.85em;
-        color: rgba(255, 255, 255, 0.8);
-        margin: 15px 5px 20px 5px; /* Ajustar margen */
-    }
-    .remember-me {
-        display:flex;
-        align-items:center;
-        cursor: pointer;
-    }
-    .remember-me input[type="checkbox"] {
-       width: auto; /* Tamaño automático */
-       margin-right: 6px;
-       vertical-align: middle;
-       cursor: pointer;
-       accent-color: #3a79ff; /* Color del check */
-    }
-    .remember-me label {
-       vertical-align: middle;
-       cursor: pointer;
-    }
-    .forgot-password a {
-       color: rgba(255, 255, 255, 0.8);
-       text-decoration: none;
-       font-size: 0.95em;
-    }
-    .forgot-password a:hover {
-       color: #fff;
-       text-decoration: underline;
-    }
-
-
-    /* Media Query (Ajustes para simplificar) */
-    @media screen and (max-width: 850px) { /* Aumentar breakpoint */
-        body {
-            height: auto;
-            min-height: 100vh;
-            overflow-y: auto;
-        }
-        .main-content-wrapper {
-            overflow-y: visible;
-            margin-top: 15px;
-            padding: 10px;
-            height: auto;
-        }
-        .contenedor__todo {
-            flex-direction: column;
-            max-width: 420px; /* Ancho máximo en móvil */
-            background: none;
-            box-shadow: none;
-        }
-        .columna-izquierda {
-            /* Ocultar completamente en móvil o ajustar */
-            display: none; /* Ocultar para simplificar */
-        }
-        .columna-derecha {
-            flex-basis: auto;
-            width: 100%;
-            min-height: auto;
-            background: none;
-        }
-        .contenedor__login-register {
-             padding: 0;
-        }
-        .formulario__login,
-        .formulario__register {
-            position: relative;
-            transform: none;
-            left: auto;
-            top: auto;
-            width: 100%;
-            margin: 0 auto 20px auto;
-            opacity: 1 !important;
-            visibility: visible !important;
-            /* Solo mostrar el formulario activo */
-            display: none;
-        }
-         .formulario__login.formulario__activo,
-         .formulario__register.formulario__activo {
-             display: block !important;
-         }
-         /* Añadir enlace para cambiar entre formularios en móvil */
-         .enlace-cambio-form {
-             display: block;
-             text-align: center;
-             margin-top: 20px;
-             padding: 10px;
-             color: white;
-             font-size: 0.9em;
-             text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-         }
-          .enlace-cambio-form a {
-              color: #a7c0ff;
-              font-weight: 600;
-              cursor: pointer;
-              text-decoration: underline;
-          }
-    }
-
-     @media screen and (min-width: 851px) {
-         .enlace-cambio-form {
-             display: none; /* Ocultar enlace en desktop */
-         }
-     }
+body {
+    background: url('../../IMAGENES/FondoLogin.jpg') no-repeat center center/cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+.logos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.logo {
+    width: 180px;
+    height: auto;
+}
+.logo.dekiru {
+    width: 200px;
+}
+.divider {
+    width: 2px;
+    height: 100px;
+    background-color: white;
+}
+.container {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+h2 {
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: white;
+}
+.input-field {
+    width: calc(100% - 24px);
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+}
+.remember-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    font-size: 14px;
+    margin: 10px 0;
+    color: white;
+}
+.remember-me {
+    display: flex;
+    align-items: center;
+}
+.remember-me input {
+    margin-right: 8px;
+}
+.forgot-password {
+    font-size: 14px;
+    color: white;
+}
+.btn {
+    background: #2D4EFF;
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+.btn:hover {
+    background: #1E3BCC;
+}
+.hidden {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+.visible {
+    display: block;
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
