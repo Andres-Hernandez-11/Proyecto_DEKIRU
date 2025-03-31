@@ -88,13 +88,25 @@ h2 {
 .btn:hover {
     background: #1E3BCC;
 }
-.hidden {
-    display: none;
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+
+.container {
+    position: relative; /* Asegura que los formularios se apilen correctamente */
+    overflow: hidden; /* Evita que los elementos ocultos causen desplazamientos */
 }
+
+/* Ocultar con transición */
+.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0.5s;
+    position: absolute; /* Asegura que los formularios no ocupen espacio */
+    width: 100%;
+}
+
+/* Mostrar con transición */
 .visible {
-    display: block;
     opacity: 1;
-    transition: opacity 0.5s ease-in-out;
+    visibility: visible;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out, visibility 0.5s;
+    position: relative;
 }

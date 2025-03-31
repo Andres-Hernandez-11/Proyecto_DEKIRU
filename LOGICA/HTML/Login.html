@@ -9,63 +9,64 @@
 
 </head>
 <body>
-<div class="logos">
-    <img src="../../IMAGENES/LogoRapidosDelAltiplano.jpg" alt="Rápidos del Altiplano" class="logo">
-    <div class="divider"></div>
-    <img src="../../IMAGENES/Logodekiru.jpg" alt="Dekiru" class="logo dekiru">
-</div>
-
-<div class="container">
-    <h2 id="form-title">Iniciar Sesión</h2>
-    <div id="login-form" class="visible">
-        <input type="text" placeholder="Correo electrónico" class="input-field">
-        <input type="password" placeholder="Contraseña" class="input-field">
-        <div class="remember-container">
-            <div class="remember-me">
-                <input type="checkbox" id="remember">
-                <label for="remember">Recuérdame</label>
+    <div class="logos">
+        <img src="../../IMAGENES/LogoRapidosDelAltiplano.jpg" alt="Rápidos del Altiplano" class="logo">
+        <div class="divider"></div>
+        <img src="../../IMAGENES/Logodekiru.jpg" alt="Dekiru" class="logo dekiru">
+    </div>
+    
+    <div class="container">
+        <h2 id="form-title">Iniciar Sesión</h2>
+        <div id="login-form" class="visible">
+            <input type="text" placeholder="Correo electrónico" class="input-field">
+            <input type="password" placeholder="Contraseña" class="input-field">
+            <div class="remember-container">
+                <div class="remember-me">
+                    <input type="checkbox" id="remember">
+                    <label for="remember">Recuérdame</label>
+                </div>
+                <div class="forgot-password">¿Olvidaste tu contraseña?</div>
             </div>
-            <div class="forgot-password">¿Olvidaste tu contraseña?</div>
+            <button class="btn" id="login-btn">Entrar</button>
         </div>
-        <button class="btn" id="login-btn">Entrar</button>
+        <div id="register-form" class="hidden">
+            <input type="text" placeholder="Nombre completo" class="input-field">
+            <input type="text" placeholder="Correo electrónico" class="input-field">
+            <input type="text" placeholder="Usuario" class="input-field">
+            <input type="password" placeholder="Contraseña" class="input-field">
+            <button class="btn" id="register-btn">Registrarse</button>
+        </div>
+        <button class="btn" id="toggle-btn">Registrarse</button>
     </div>
-    <div id="register-form" class="hidden">
-        <input type="text" placeholder="Nombre completo" class="input-field">
-        <input type="text" placeholder="Correo electrónico" class="input-field">
-        <input type="text" placeholder="Usuario" class="input-field">
-        <input type="password" placeholder="Contraseña" class="input-field">
-        <button class="btn" id="register-btn">Registrarse</button>
-    </div>
-    <button class="btn" id="toggle-btn">Registrarse</button>
-</div>
+    
+    <script>
+        const toggleBtn = document.getElementById("toggle-btn");
+        const loginForm = document.getElementById("login-form");
+        const registerForm = document.getElementById("register-form");
+        const formTitle = document.getElementById("form-title");
 
-<script>
-    const toggleBtn = document.getElementById("toggle-btn");
-    const loginForm = document.getElementById("login-form");
-    const registerForm = document.getElementById("register-form");
-    const formTitle = document.getElementById("form-title");
+        toggleBtn.addEventListener("click", () => {
+            if (loginForm.classList.contains("visible")) {
+                loginForm.classList.remove("visible");
+                loginForm.classList.add("hidden");
 
-    toggleBtn.addEventListener("click", () => {
-        if (loginForm.classList.contains("visible")) {
-            loginForm.classList.remove("visible");
-            loginForm.classList.add("hidden");
-            setTimeout(() => {
                 registerForm.classList.remove("hidden");
                 registerForm.classList.add("visible");
-            }, 500);
-            formTitle.textContent = "Registrarse";
-            toggleBtn.textContent = "Iniciar Sesión";
-        } else {
-            registerForm.classList.remove("visible");
-            registerForm.classList.add("hidden");
-            setTimeout(() => {
+
+                formTitle.textContent = "Registrarse";
+                toggleBtn.textContent = "Iniciar Sesión";
+            } else {
+                registerForm.classList.remove("visible");
+                registerForm.classList.add("hidden");
+
                 loginForm.classList.remove("hidden");
                 loginForm.classList.add("visible");
-            }, 500);
-            formTitle.textContent = "Iniciar Sesión";
-            toggleBtn.textContent = "Registrarse";
-        }
-    });
-</script>
-</body>
-</html>
+
+                formTitle.textContent = "Iniciar Sesión";
+                toggleBtn.textContent = "Registrarse";
+            }
+        });
+
+    </script>
+    </body>
+    </html>
