@@ -85,8 +85,7 @@ nombre VARCHAR(100) NOT NULL,
 apellido VARCHAR(100) NOT NULL,
 correo VARCHAR(100) UNIQUE NOT NULL,
 usuario VARCHAR(50) UNIQUE NOT NULL,
-contrasena VARCHAR(255) NOT NULL, -- Recomendable almacenar contraseñas encriptadas
-rol_id INT
+contrasena VARCHAR(255) NOT NULL -- Recomendable almacenar contraseñas encriptadas
 );
 
 
