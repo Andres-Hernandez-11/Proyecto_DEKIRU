@@ -1,14 +1,7 @@
 <?php
-// Iniciar la sesión al principio de todo para acceder a las variables de sesión
+
 session_start();
 
-// Opcional: Verificar si el usuario está logueado, si no, redirigir al login
-// if (!isset($_SESSION['id_usuario'])) {
-//     header('Location: ../VISTA/Login_UI.php');
-//     exit();
-// }
-
-// Obtener el nombre del script actual para el resaltado dinámico del menú
 $current_page = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
@@ -72,7 +65,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <span class="user-info">
                             Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Usuario'); ?>
                         </span>
-                        <a href="../CONTROLADOR/cerrar_sesion.php" class="logout-button">
+                        <a href="../MODELO/CerrarSesion.php" class="logout-button">
                             <span class="icon"></span>
                             Cerrar Sesión
                         </a>

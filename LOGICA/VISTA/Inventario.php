@@ -61,8 +61,8 @@ session_start();
                         <span class="user-info">
                             Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Usuario'); ?>
                         </span>
-                        <a href="../CONTROLADOR/CerrarSesion.php" class="logout-button btn btn-secondary">
-                            <span class="icon">[X]</span> Cerrar Sesión
+                        <a href="../MODELO/CerrarSesion.php" class="logout-button btn btn-secondary">
+                            <span class="icon"></span> Cerrar Sesión
                         </a>
                     </div>
                 </div>
