@@ -119,7 +119,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                                     <li>[Nombre Item] ([Cantidad])</li>
                                 </ul>
                             </div>
-                            <a href="Inventario.php" class="widget-link">Gestionar Inventario ></a> </div>
+                            <a href="InventarioStart.php" class="widget-link">Gestionar Inventario ></a> </div>
 
                         <div class="widget">
                             <h3 class="widget-title">Clientes</h3>
