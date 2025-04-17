@@ -1,9 +1,5 @@
 <?php
-// Asumiendo que session_start() se llama en el archivo principal (InventarioStart.php)
-// Si este archivo se ejecuta directamente, descomenta la siguiente línea:
-// session_start();
 
-// --- Configuración y Conexión ---
 error_reporting(E_ALL); // Temporal: Mostrar todos los errores durante el desarrollo
 ini_set('display_errors', 1); // Temporal: Mostrar errores en pantalla
 $current_page = basename($_SERVER['PHP_SELF']);
@@ -160,23 +156,9 @@ try {
     $total_paginas = 0;
 }
 
-// --- Cerrar Conexión ---
-// Es buena práctica cerrarla aquí si este script termina la interacción con BD
-// Si InventarioStart.php hace más cosas después, podrías cerrarla allí.
 if ($conn) {
     $conn->close();
 }
 
-// --- Variable para Sidebar (si se define aquí) ---
-// Si este archivo es incluido por InventarioStart.php, esta línea podría no ser necesaria aquí
-// si InventarioStart.php ya la define antes de incluir la vista.
-// $current_page = basename($_SERVER['PHP_SELF']); // O el nombre específico si es incluido
-
-
-// --- Fin del bloque de lógica ---
-// Las variables $categorias_disponibles, $proveedores_disponibles, $inventario_paginado,
-// $total_items, $total_paginas, $pagina_actual, $items_por_pagina, $error_db,
-// y las variables de filtro ($busqueda, $categoria_filtro, etc.)
-// están ahora listas para ser usadas por el archivo de vista (inventario_vista.php).
 
 ?>

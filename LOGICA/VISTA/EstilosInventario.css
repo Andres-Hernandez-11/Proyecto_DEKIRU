@@ -1,14 +1,3 @@
-/**
- * Estilos Generales para Dashboard
- *
- * Estructura:
- * 1. Importaciones y Estilos Base
- * 2. Estructura Principal (Layout)
- * 3. Componentes Principales (Sidebar, Header)
- * 4. Componentes Reutilizables (Botones, Formularios, Tablas, Paginación, Modales, Feedback)
- * 5. Estilos Específicos de Módulo (Inventario)
- * 6. Media Queries
- */
 
 /* ========================================================================== */
 /* 1. Importaciones y Estilos Base                                           */
@@ -28,10 +17,9 @@ body {
     background-color: #f3f4f6; /* gray-100 */
     color: #1f2937; /* gray-800 */
     line-height: 1.5;
-    /* Evita el scroll horizontal si el modal está abierto */
 }
 body.modal-open {
-    overflow: hidden;
+    overflow: hidden; /* Evitar scroll del body cuando el modal está abierto */
 }
 
 /* Estilos base para enlaces */
@@ -47,7 +35,7 @@ a:hover {
 button,
 input,
 select,
-textarea { /* Añadido textarea para consistencia */
+textarea {
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
@@ -70,28 +58,34 @@ button {
 .dashboard-container {
     display: flex;
     height: 100vh;
-    overflow: hidden; /* Evitar scroll en el contenedor principal */
+    overflow: hidden;
 }
 
 .main-content-area {
-    flex: 1; /* Ocupa el espacio restante */
+    flex: 1;
     display: flex;
     flex-direction: column;
-    overflow: hidden; /* Evitar que el contenido desborde el área */
+    overflow: hidden;
+    /* Ajustar margin-left si el ancho del sidebar cambia */
+    margin-left: 250px; /* Asumiendo sidebar de 250px */
 }
 
 .main-content {
-    flex: 1; /* Permite que esta área crezca y use el scroll */
+    flex: 1;
     overflow-x: hidden;
-    overflow-y: auto; /* Scroll vertical cuando sea necesario */
-    background-color: #f3f4f6; /* bg-gray-100 */
-    padding: 1.5rem; /* p-6 */
+    overflow-y: auto;
+    background-color: #f3f4f6;
+    padding: 1.5rem;
 }
 
-.main-container { /* Contenedor opcional para limitar ancho del contenido */
-    max-width: 80rem; /* container - aprox max-w-7xl */
-    margin-left: auto;
-    margin-right: auto;
+.main-container {
+     background-color: #ffffff;
+     border-radius: 0.5rem;
+     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+     padding: 1.5rem;
+    /* max-width: 80rem; */ /* Descomentar si quieres limitar el ancho */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
 }
 
 /* ========================================================================== */
@@ -99,14 +93,22 @@ button {
 /* ========================================================================== */
 
 /* --- Barra Lateral (Sidebar) --- */
+/* Usando estilos de EstilosInventario.css original */
 .sidebar {
     width: 16rem; /* w-64 */
     background-color: #ffffff; /* bg-white */
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-md */
     display: flex;
     flex-direction: column;
-    overflow-y: auto; /* Scroll si el contenido es largo */
-    overflow-x: hidden; /* No debería haber scroll horizontal */
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Ajustar si se quiere fijo */
+     position: fixed;
+     height: 100%;
+     left: 0;
+     top: 0;
+     z-index: 50; /* Asegurar que esté sobre el contenido pero bajo modales */
+     border-right: 1px solid #e5e7eb; /* Borde derecho */
 }
 
 .sidebar-header {
@@ -124,6 +126,8 @@ button {
 
 .sidebar-logo {
     height: 2.5rem; /* h-10 */
+     max-width: 80%; /* Ajustado */
+     border-radius: 0.375rem; /* Añadido */
 }
 
 .sidebar-title {
@@ -133,7 +137,7 @@ button {
 }
 
 .sidebar-nav {
-    flex: 1; /* Ocupa el espacio restante en el sidebar */
+    flex: 1;
     padding: 1rem 0.5rem; /* px-2 py-4 */
 }
 
@@ -154,8 +158,8 @@ button {
     height: 1rem; /* 16px */
     margin-right: 0.75rem; /* mr-3 */
     vertical-align: middle;
-    flex-shrink: 0; /* Evita que el icono se encoja */
-    object-fit: contain; /* Asegura que la imagen quepa sin deformarse */
+    flex-shrink: 0;
+    object-fit: contain;
 }
 
 .sidebar-link:hover {
@@ -173,24 +177,18 @@ button {
     background-color: #1d4ed8; /* hover:bg-blue-700 */
 }
 
-/* Scrollbar simple para sidebar (solo Webkit - Chrome, Safari, Edge) */
-.sidebar::-webkit-scrollbar {
-    width: 4px;
-}
-.sidebar::-webkit-scrollbar-thumb {
-    background-color: #9ca3af; /* gray-400 */
-    border-radius: 20px;
-}
-.sidebar::-webkit-scrollbar-track {
-    background-color: #e5e7eb; /* gray-200 */
-}
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 20px; }
+.sidebar::-webkit-scrollbar-track { background-color: #e5e7eb; }
 
 /* --- Encabezado Superior (Header) --- */
+/* Usando estilos de EstilosInventario.css original */
 .header {
     background-color: #ffffff; /* bg-white */
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
     border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
-    flex-shrink: 0; /* Evitar que el header se encoja */
+    flex-shrink: 0;
+    height: 4rem; /* h-16 */
 }
 
 .header-container {
@@ -202,7 +200,7 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 4rem; /* h-16 */
+    height: 100%;
 }
 
 .header-left {
@@ -210,26 +208,18 @@ button {
     align-items: center;
 }
 
-.header-title { /* Título opcional en el header */
+.header-title {
     font-size: 1.25rem; /* text-xl */
     font-weight: 600; /* font-semibold */
     color: #111827; /* text-gray-900 */
-    margin-right: 1.5rem; /* Espacio si hay título y filtro */
+    margin-right: 1.5rem;
 }
 
-.header-filter select { /* Estilo base para selects en el header */
-    border: 1px solid #d1d5db; /* border border-gray-300 */
-    border-radius: 0.375rem; /* rounded-md */
-    padding: 0.25rem 0.75rem; /* px-3 py-1 */
-    font-size: 0.875rem; /* text-sm */
-    outline: none;
-    background-color: #fff; /* Asegurar fondo blanco */
-    height: auto; /* Resetear altura si la heredó */
-    line-height: 1.5; /* Línea normal */
+.header-filter select {
+    border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.25rem 0.75rem; font-size: 0.875rem; outline: none; background-color: #fff; height: auto; line-height: 1.5;
 }
 .header-filter select:focus {
-    border-color: #2563eb; /* focus:border-blue-500 */
-    box-shadow: 0 0 0 1px #2563eb; /* focus:ring-1 focus:ring-blue-500 */
+    border-color: #2563eb; box-shadow: 0 0 0 1px #2563eb;
 }
 
 .header-right {
@@ -243,57 +233,45 @@ button {
     color: #4b5563; /* text-gray-600 */
 }
 
-.logout-button { /* Estilo consistente para el botón/enlace logout */
-    display: flex;
-    align-items: center;
-    font-size: 0.875rem; /* text-sm */
-    color: #6b7280; /* text-gray-500 */
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.375rem; /* rounded-md */
-    transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+.logout-button {
+    display: flex; align-items: center; font-size: 0.875rem; color: #6b7280; background: none; border: none; cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 0.375rem; transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
 }
 .logout-button:hover {
-    color: #374151; /* hover:text-gray-700 */
-    background-color: #f3f4f6; /* Opcional: ligero fondo al pasar el mouse */
-    text-decoration: none; /* Evitar subrayado de enlace */
+    color: #374151; background-color: #f3f4f6; text-decoration: none;
 }
- .logout-button .icon { /* Placeholder para icono logout */
+ .logout-button .icon {
      margin-right: 0.25rem; /* mr-1 */
+     /* Estilos de icono SVG ya estaban en línea, si se quitan, ponerlos aquí */
  }
 
 /* ========================================================================== */
 /* 4. Componentes Reutilizables                                              */
 /* ========================================================================== */
 
-/* --- Botones Generales --- */
+/* --- Botones Generales (Restaurando versión original de EstilosInventario.css) --- */
 .btn {
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1rem; /* Padding original */
     border-radius: 0.375rem; /* rounded-md */
     font-weight: 500;
     font-size: 0.875rem; /* text-sm */
-    display: inline-flex; /* Permite alinear icono y texto */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid transparent; /* Base para botones con borde */
+    border: 1px solid transparent;
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    height: 38px; /* Altura consistente (ajustar si es necesario) */
+    height: 38px; /* Altura consistente original */
     cursor: pointer;
-    text-decoration: none; /* Para botones que son enlaces <a> */
-    line-height: 1; /* Evitar altura extra por line-height */
-    white-space: nowrap; /* Evitar que el texto del botón se parta */
+    text-decoration: none;
+    line-height: 1; /* line-height original */
+    white-space: nowrap;
 }
 .btn:hover {
     text-decoration: none;
 }
-.btn .icon { /* Iconos dentro de botones */
+.btn .icon {
     margin-right: 0.5rem;
-    /* Añadir estilos de icono real aquí */
     font-style: normal;
 }
-
 .btn-primary {
     background-color: #2563eb; /* blue-600 */
     color: #ffffff;
@@ -302,611 +280,210 @@ button {
 .btn-primary:hover {
     background-color: #1d4ed8; /* blue-700 */
     border-color: #1d4ed8;
-    color: #ffffff; /* Asegurar color en hover */
+    color: #ffffff;
 }
-
-
+/* Estilo .btn-secondary restaurado del archivo original */
+.btn-secondary {
+    background-color: #ffffff; /* bg-white */
+    color: #374151; /* text-gray-700 */
+    border-color: #d1d5db; /* border-gray-300 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+}
+.btn-secondary:hover {
+    background-color: #f9fafb; /* hover:bg-gray-50 */
+    border-color: #adb5bd; /* Borde hover */
+    color: #1f2937; /* hover:text-gray-800 */
+}
+.btn-danger {
+    background-color: #dc2626; /* red-600 */
+    color: #ffffff;
+    border-color: #dc2626;
+}
+.btn-danger:hover {
+    background-color: #b91c1c; /* red-700 */
+    border-color: #b91c1c;
+}
 
 
 /* --- Barra de Acciones (Filtros, Búsqueda, etc.) --- */
+/* Usando estilos de EstilosInventario.css original */
 .action-bar {
-    display: flex;
-    flex-wrap: wrap; /* Elementos bajan en pantallas pequeñas */
-    gap: 0.75rem; /* Espacio entre elementos */
-    padding: 1rem;
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    margin-bottom: 1.5rem;
-    border: 1px solid #e5e7eb; /* Borde sutil añadido */
+    display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 1rem; background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); margin-bottom: 1.5rem; border: 1px solid #e5e7eb;
 }
-
 .action-bar .search-field {
-    flex-grow: 1; /* Ocupa espacio disponible */
-    min-width: 200px; /* Ancho mínimo */
-    display: flex;
-    align-items: center;
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    padding: 0 0.75rem; /* Padding horizontal */
-    background-color: #fff; /* Fondo blanco */
-    height: 38px; /* Misma altura que botones */
+    flex-grow: 1; min-width: 200px; display: flex; align-items: center; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0 0.75rem; background-color: #fff; height: 38px;
 }
-
 .action-bar .search-field input[type="search"] {
-    border: none;
-    outline: none;
-    width: 100%;
-    margin-left: 0.5rem;
-    padding: 0.5rem 0; /* Padding vertical dentro del input */
-    background: transparent; /* Fondo transparente */
-    height: auto; /* Altura automática */
+    border: none; outline: none; width: 100%; margin-left: 0.5rem; padding: 0.5rem 0; background: transparent; height: auto;
 }
-
-.action-bar .search-field .icon { /* Icono lupa */
-    color: #6b7280; /* gray-500 */
-    flex-shrink: 0; /* Evitar que se encoja */
-    /* Estilos icono real */
-    font-style: normal;
-}
-
+.action-bar .search-field .icon { color: #6b7280; flex-shrink: 0; font-style: normal; }
 .action-bar select,
 .action-bar .checkbox-container {
-    border: 1px solid #d1d5db;
-    border-radius: 0.375rem;
-    padding: 0.5rem 0.75rem;
-    background-color: #ffffff;
-    color: #374151;
-    font-size: 0.875rem; /* text-sm */
-    height: 38px; /* Alinear altura */
-    display: flex; /* Para alinear contenido verticalmente */
-    align-items: center;
+    border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; background-color: #ffffff; color: #374151; font-size: 0.875rem; height: 38px; display: flex; align-items: center;
 }
-
 .action-bar select {
-    /* Estilos adicionales si son diferentes al header */
-    -webkit-appearance: none; /* Quitar apariencia nativa */
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); /* Flecha SVG */
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem; /* Espacio para la flecha */
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem;
 }
-
-.action-bar .checkbox-container {
-    padding-right: 0.5rem; /* Menos padding para checkbox */
-    border: none; /* Checkbox no necesita borde contenedor */
-    background: none; /* Ni fondo */
-    height: auto; /* Altura automática */
-}
-
-.action-bar .checkbox-container input[type="checkbox"] {
-    margin-right: 0.5rem;
-    height: 1rem;
-    width: 1rem;
-    border: 1px solid #d1d5db; /* Borde para el checkbox */
-    border-radius: 0.25rem; /* Ligeramente redondeado */
-    cursor: pointer;
-}
-.action-bar .checkbox-container label {
-    cursor: pointer;
-    color: #374151;
-    font-weight: 500; /* Hacer etiqueta un poco más visible */
-}
+.action-bar .checkbox-container { padding-right: 0.5rem; border: none; background: none; height: auto; }
+.action-bar .checkbox-container input[type="checkbox"] { margin-right: 0.5rem; height: 1rem; width: 1rem; border: 1px solid #d1d5db; border-radius: 0.25rem; cursor: pointer; }
+.action-bar .checkbox-container label { cursor: pointer; color: #374151; font-weight: 500; }
 
 /* --- Tabla de Datos --- */
-.table-container {
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-    overflow-x: auto; /* Scroll horizontal en tablas grandes */
-    border: 1px solid #e5e7eb; /* Borde contenedor */
-    margin-bottom: 1.5rem; /* Espacio después de la tabla */
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-    border: none; /* Quitar borde de la tabla, se maneja en celdas */
-}
-
-th, td {
-    border: none; /* Borde base quitado */
-    border-bottom: 1px solid #e5e7eb; /* Separador horizontal */
-    padding: 0.75rem 1rem; /* p-3 o p-4 */
-    text-align: left;
-    font-size: 0.875rem; /* text-sm */
-    vertical-align: middle; /* Alinear verticalmente */
-    line-height: 1.4; /* Ajustar línea para celdas */
-}
-td:first-child, th:first-child { padding-left: 1.5rem; } /* Más padding en la primera columna */
-td:last-child, th:last-child { padding-right: 1.5rem; } /* Más padding en la última columna */
-
-
-th {
-    background-color: #f9fafb; /* gray-50 */
-    font-weight: 600; /* font-semibold */
-    color: #374151; /* text-gray-700 */
-    white-space: nowrap; /* Evitar que los títulos se partan */
-    border-bottom-width: 2px; /* Borde inferior más grueso para header */
-}
-
-tbody tr {
-    transition: background-color 0.15s ease-in-out;
-}
-tbody tr:last-child td {
-    border-bottom: none; /* Quitar borde inferior de la última fila */
-}
-tbody tr:nth-child(odd) {
-    background-color: #ffffff; /* bg-white */
-}
-tbody tr:nth-child(even) {
-    background-color: #f9fafb; /* gray-50 */
-}
-tbody tr:hover {
-    background-color: #f0f9ff; /* blue-50 en hover */
-}
-
-/* Celda de Acciones en Tabla */
-td.actions-cell {
-    white-space: nowrap;
-    text-align: right; /* Alinear botones a la derecha */
-    padding-right: 1rem; /* Ajustar padding si es necesario */
-}
-
-.actions-cell .action-btn {
-    display: inline-block; /* O inline-flex si usan iconos */
-    padding: 0.3rem 0.5rem; /* Padding más ajustado para iconos */
-    margin: 0 0.15rem;
-    color: #6b7280; /* gray-500 */
-    border-radius: 0.25rem; /* rounded-sm */
-    transition: background-color 0.2s ease, color 0.2s ease;
-    line-height: 1;
-    border: none; /* Asegurar que no tenga borde */
-    background: none; /* Ni fondo */
-    cursor: pointer;
-}
-.actions-cell .action-btn:hover {
-    background-color: #e5e7eb; /* gray-200 */
-    color: #1f2937; /* gray-800 */
-    text-decoration: none;
-}
-.actions-cell .action-btn.delete {
-    color: #dc2626; /* red-600 */
-}
-.actions-cell .action-btn.delete:hover {
-    background-color: #fee2e2; /* red-100 */
-    color: #b91c1c; /* red-700 */
-}
-.actions-cell .action-btn .icon {
-    font-size: 1.1em; /* Iconos un poco más grandes */
-    vertical-align: middle;
-    display: inline-block; /* Para que se alinee bien */
-    /* Estilos de icono real */
-    font-style: normal;
-}
-
-/* Celda de Stock Bajo (Ejemplo de Badge/Tag en tabla) */
-.low-stock {
-    background-color: #fef3c7; /* amber-100 */
-    color: #b45309; /* amber-700 */
-    font-weight: 500; /* Cambiado a 500 */
-    text-align: center;
-    border-radius: 0.25rem;
-    padding: 0.25rem 0.5rem;
-    display: inline-flex; /* Alinear icono y texto */
-    align-items: center;
-    font-size: 0.8rem;
-    line-height: 1; /* Ajustar línea */
-}
-.low-stock .icon {
-    margin-right: 0.25rem;
-    font-size: 0.9em;
-    /* Estilo icono real */
-    font-style: normal;
-}
-
+/* Usando estilos de EstilosInventario.css original */
+.table-container { background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); overflow-x: auto; border: 1px solid #e5e7eb; margin-bottom: 1.5rem; }
+table { border-collapse: collapse; width: 100%; border: none; }
+th, td { border: none; border-bottom: 1px solid #e5e7eb; padding: 0.75rem 1rem; text-align: left; font-size: 0.875rem; vertical-align: middle; line-height: 1.4; }
+td:first-child, th:first-child { padding-left: 1.5rem; }
+td:last-child, th:last-child { padding-right: 1.5rem; }
+th { background-color: #f9fafb; font-weight: 600; color: #374151; white-space: nowrap; border-bottom-width: 2px; }
+tbody tr { transition: background-color 0.15s ease-in-out; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(odd) { background-color: #ffffff; }
+tbody tr:nth-child(even) { background-color: #f9fafb; }
+tbody tr:hover { background-color: #f0f9ff; }
+td.actions-cell { white-space: nowrap; text-align: right; padding-right: 1rem; }
+.actions-cell .action-btn { display: inline-block; padding: 0.3rem 0.5rem; margin: 0 0.15rem; color: #6b7280; border-radius: 0.25rem; transition: background-color 0.2s ease, color 0.2s ease; line-height: 1; border: none; background: none; cursor: pointer; }
+.actions-cell .action-btn:hover { background-color: #e5e7eb; color: #1f2937; text-decoration: none; }
+.actions-cell .action-btn.delete { color: #dc2626; }
+.actions-cell .action-btn.delete:hover { background-color: #fee2e2; color: #b91c1c; }
+.actions-cell .action-btn .icon { font-size: 1.1em; vertical-align: middle; display: inline-block; font-style: normal; }
+.low-stock { background-color: #fef3c7; color: #b45309; font-weight: 500; text-align: center; border-radius: 0.25rem; padding: 0.25rem 0.5rem; display: inline-flex; align-items: center; font-size: 0.8rem; line-height: 1; }
+.low-stock .icon { margin-right: 0.25rem; font-size: 0.9em; font-style: normal; }
 
 /* --- Paginación --- */
-.pagination {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap; /* Ajuste en pantallas pequeñas */
-    gap: 1rem; /* Espacio entre info y botones */
-    padding: 1rem;
-    margin-top: 1.5rem; /* Separación de la tabla */
-    background-color: #ffffff;
-    border-radius: 0.5rem;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    border: 1px solid #e5e7eb; /* Borde añadido */
-    font-size: 0.875rem; /* text-sm */
-    color: #4b5563; /* text-gray-600 */
-}
-
-.pagination .page-info {
-    flex-grow: 1; /* Ocupa espacio */
-    white-space: nowrap;
-    margin-right: 1rem; /* Espacio antes de los botones */
-}
-
-.pagination .page-nav {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem; /* Espacio reducido entre botones */
-}
-
+/* Usando estilos de EstilosInventario.css original */
+.pagination { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1rem; margin-top: 1.5rem; background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; font-size: 0.875rem; color: #4b5563; }
+.pagination .page-info { flex-grow: 1; white-space: nowrap; margin-right: 1rem; }
+.pagination .page-nav { display: flex; align-items: center; gap: 0.25rem; }
 .pagination .page-nav button,
-.pagination .page-nav a {
-    padding: 0.5rem 1rem;
-    border: 1px solid #d1d5db; /* gray-300 */
-    border-radius: 0.375rem; /* rounded-md */
-    background-color: #ffffff;
-    color: #374151; /* gray-700 */
-    display: inline-flex; /* Para alinear iconos si los hubiera */
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-    min-width: 38px; /* Ancho mínimo para botones */
-    height: 38px; /* Altura consistente */
-    line-height: 1;
-}
-
+.pagination .page-nav a { padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background-color: #ffffff; color: #374151; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; min-width: 38px; height: 38px; line-height: 1; }
 .pagination .page-nav button:hover:not(:disabled),
-.pagination .page-nav a:hover {
-    background-color: #f9fafb; /* gray-50 */
-    text-decoration: none;
-    border-color: #adb5bd; /* Borde ligeramente más oscuro */
-}
+.pagination .page-nav a:hover { background-color: #f9fafb; text-decoration: none; border-color: #adb5bd; }
+.pagination .page-nav button:disabled { opacity: 0.6; cursor: not-allowed; background-color: #f9fafb; }
+.pagination .page-nav .page-number { padding: 0.5rem 0.75rem; border: 1px solid transparent; min-width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; }
+.pagination .page-nav .page-number.active { border-color: #2563eb; background-color: #eff6ff; font-weight: 600; color: #1d4ed8; z-index: 1; }
 
-.pagination .page-nav button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    background-color: #f9fafb; /* Fondo ligeramente distinto */
-}
-
-.pagination .page-nav .page-number { /* Estilo para números de página (si son <a> o <span>) */
-    padding: 0.5rem 0.75rem; /* Más ajustado horizontalmente */
-    border: 1px solid transparent; /* Sin borde por defecto */
-    min-width: 38px;
-    height: 38px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.pagination .page-nav .page-number.active { /* Número de página activo */
-    border-color: #2563eb; /* Borde azul */
-    background-color: #eff6ff; /* Fondo azul muy claro */
-    font-weight: 600;
-    color: #1d4ed8; /* Azul oscuro */
-    z-index: 1; /* Ponerlo por encima de los otros */
-}
-
-/* --- Modales --- */
+/* --- Modales (Restaurando estructura original de EstilosInventario.css) --- */
 .modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.6); /* Fondo oscuro semitransparente */
-    display: none; /* Oculto por defecto */
-    justify-content: center;
-    align-items: center;
-    z-index: 1000; /* Asegurar que esté por encima de todo */
-    padding: 1rem; /* Espacio por si el modal es muy alto/ancho */
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem;
 }
-.modal-overlay.active {
-    display: flex; /* Mostrar cuando tenga la clase 'active' */
-}
-
+.modal-overlay.active { display: flex; }
 .modal-content {
-    background-color: #fff;
-    padding: 2rem;
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    width: 90%; /* Ancho relativo */
-    max-width: 600px; /* Ancho máximo por defecto */
-    max-height: 90vh; /* Altura máxima relativa a la ventana */
-    overflow-y: auto; /* Scroll interno si el contenido es largo */
-    position: relative; /* Para posicionar el botón de cierre absoluto si se quisiera */
-    display: flex; /* Usar flex para estructura interna */
-    flex-direction: column;
+    background-color: #fff; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; display: flex; flex-direction: column;
 }
-
 .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid #e5e7eb; /* gray-200 */
-    padding-bottom: 1rem;
-    margin-bottom: 1.5rem; /* Espacio antes del body */
-    flex-shrink: 0; /* Evitar que se encoja */
+    display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem; flex-shrink: 0;
 }
-.modal-title {
-    font-size: 1.25rem; /* text-xl */
-    font-weight: 600;
-    color: #111827; /* gray-900 */
-}
-.modal-close-btn {
-    background: none;
-    border: none;
-    font-size: 1.5rem;
-    color: #6b7280; /* gray-500 */
-    cursor: pointer;
-    padding: 0.5rem; /* Área de click más grande */
-    line-height: 1; /* Alinear icono (ej. &times;) */
-    transition: color 0.2s ease;
-}
-.modal-close-btn:hover {
-    color: #111827; /* gray-900 */
-}
+.modal-title { font-size: 1.25rem; font-weight: 600; color: #111827; }
+.modal-close-btn { background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer; padding: 0.5rem; line-height: 1; transition: color 0.2s ease; }
+.modal-close-btn:hover { color: #111827; }
+.modal-body { line-height: 1.6; flex-grow: 1; margin-bottom: 1.5rem; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid #e5e7eb; padding-top: 1rem; margin-top: auto; flex-shrink: 0; }
 
-.modal-body {
-    line-height: 1.6;
-    flex-grow: 1; /* Ocupa el espacio disponible */
-    /* Padding ya viene del modal-content, ajustar si es necesario */
-    margin-bottom: 1.5rem; /* Espacio antes del footer */
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end; /* Botones a la derecha */
-    gap: 0.75rem; /* Espacio entre botones */
-    border-top: 1px solid #e5e7eb; /* gray-200 */
-    padding-top: 1rem;
-    margin-top: auto; /* Empuja el footer hacia abajo si hay poco contenido */
-    flex-shrink: 0; /* Evitar que se encoja */
-}
-
-/* Modal Específico: Ver Detalle */
-#modal-ver-item .modal-content {
-    max-width: 600px; /* O el ancho que prefieras */
-    padding: 1.5rem 2rem 2rem 2rem; /* Más padding general, especialmente abajo */
-}
-
-/* Contenedor del cuerpo del modal */
-#modal-ver-item .modal-body {
-     padding-bottom: 1rem; /* Espacio antes del footer */
-     /* border-top: 1px solid #e5e7eb; */ /* Línea opcional bajo el título */
-     /* margin-top: 1rem; */ /* Espacio opcional bajo el título */
-}
-
-/* Aplicar Grid al DL */
-#modal-ver-item dl.detail-list {
+/* --- Estilos Formularios en Modales (Restaurando estructura original) --- */
+/* Se usan IDs específicos como en EstilosInventario.css original */
+/* NOTA: Se mantienen las clases .modal-form-group y .modal-form-grid para el modal de editar que ya las usa */
+#modal-agregar-item .form-grid,
+#modal-editar-item .modal-form-grid {
     display: grid;
-    /* Columnas: 1ra etiqueta (ancho fijo), 2da valor (resto) */
-    /* Ajusta '130px' según el ancho que necesites para tus etiquetas */
-    grid-template-columns: 130px 1fr;
-    /* Ajustar espaciado: más vertical, similar horizontal */
-    gap: 1rem 1.25rem;
-    margin: 0;
-    padding: 0;
-    /* Alinear items al inicio (útil si dd tiene varias líneas) */
-    /* align-items: baseline; */ /* O prueba baseline si prefieres alinear por texto base */
-    align-items: start;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
 }
-
-/* Estilo para las etiquetas (dt) - AHORA ALINEADAS A LA IZQUIERDA */
-#modal-ver-item dl.detail-list dt {
-    grid-column: 1;
-    font-weight: 500; /* Un poco más sutil que 600 */
-    color: #4b5563;  /* Gris medio-oscuro */
-    text-align: left; /* *** CAMBIO PRINCIPAL: Alinear a la izquierda *** */
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.5; /* Buena altura de línea */
-    margin: 0;
-    padding: 0; /* Asegurar no padding extra */
-    /* Opcional: Añadir dos puntos al final */
-    /* position: relative; */ /* Necesario si usas ::after con posicionamiento */
-}
-/* Opción para añadir ':' automáticamente */
-#modal-ver-item dl.detail-list dt::after {
-     /* content: ":"; */ /* Descomenta si quieres ':' */
-     /* position: absolute; */
-     /* right: -0.5rem; */ /* Ajusta posición si alineas a la derecha */
-     /* color: #6b7280; */
-}
-
-/* Estilo para los valores (dd) */
-#modal-ver-item dl.detail-list dd {
-    grid-column: 2;
-    margin: 0;
-    padding: 0; /* Sin padding por defecto */
-    border: none;
-    color: #1f2937; /* Color principal oscuro */
-    font-size: 0.875rem; /* 14px */
-    line-height: 1.5;
-    white-space: pre-wrap;
-    word-break: break-word;
-    /* Añadir padding inferior para separar de la línea/fondo */
-    padding-bottom: 1rem; /* Debe coincidir con el gap vertical */
-}
-
-
-#modal-ver-item dl.detail-list dd:nth-of-type(even) { */
-    background-color: #f9fafb; */ /* Fondo gris muy pálido */
-    margin-left: -2rem; */ /* Compensar padding del modal-content */
-    padding-left: 2rem; */
-    margin-right: -2rem; */ /* Compensar padding del modal-content */
-    padding-right: 2rem; */
-    margin-top: -1rem; */ /* Compensar gap */
-    padding-top: 1rem; */
-    padding-bottom: 1rem; */
-    border-radius: 4px; */ /* Opcional: redondear esquinas del fondo */
-}
-
-/* --- Estilos para carga y error (Mantener o ajustar colores) --- */
-#modal-ver-item .loading-text,
-#modal-ver-item .error-text {
-    text-align: center;
-    padding: 3rem 1rem;
-    color: #6b7280;
-    font-size: 1rem;
-}
-#modal-ver-item .error-text {
-    color: #b91c1c;
-    font-weight: 500;
-    background-color: #fee2e2;
-    border: 1px solid #fecaca;
-    border-radius: 0.375rem;
-    margin: 1rem 0; /* Margen vertical */
-    padding: 1.5rem;
-}
-#modal-ver-item .error-text strong {
-     display: block;
-     margin-bottom: 0.5rem;
-     color: #991b1b;
-     font-weight: 600;
-}
-
-/* Modal Específico: Agregar/Editar Ítem (Formulario) */
-#modal-agregar-item .modal-content { /* Puede usarse para editar también */
-    max-width: 600px;
-}
-#modal-agregar-item .form-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Columnas adaptables */
-    gap: 1.25rem; /* Espacio entre campos */
-}
-#modal-agregar-item .form-group {
+#modal-agregar-item .form-group,
+#modal-editar-item .modal-form-group {
     display: flex;
     flex-direction: column;
 }
-#modal-agregar-item .form-group.full-width {
-    grid-column: 1 / -1; /* Ocupa todo el ancho */
+#modal-agregar-item .form-group.full-width,
+#modal-editar-item .modal-form-group.full-width {
+    grid-column: 1 / -1;
 }
-#modal-agregar-item label {
+#modal-agregar-item label,
+#modal-editar-item label {
     font-weight: 500;
     margin-bottom: 0.5rem;
-    font-size: 0.875rem; /* text-sm */
-    color: #374151; /* gray-700 */
-    display: block; /* Asegura que esté en su propia línea */
+    font-size: 0.875rem;
+    color: #374151;
+    display: block;
 }
 #modal-agregar-item input[type="text"],
 #modal-agregar-item input[type="number"],
-#modal-agregar-item input[type="search"], /* Añadido search */
-#modal-agregar-item input[type="email"], /* Añadido email */
-#modal-agregar-item input[type="password"], /* Añadido password */
 #modal-agregar-item select,
-#modal-agregar-item textarea {
-    border: 1px solid #d1d5db; /* gray-300 */
-    border-radius: 0.375rem; /* rounded-md */
-    padding: 0.6rem 0.75rem; /* Padding interno */
-    font-size: 0.875rem; /* text-sm */
-    width: 100%;
-    box-sizing: border-box;
-    background-color: #fff; /* Fondo blanco */
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+#modal-agregar-item textarea,
+#modal-editar-item input[type="text"],
+#modal-editar-item input[type="number"],
+#modal-editar-item select,
+#modal-editar-item textarea {
+    border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; width: 100%; box-sizing: border-box; background-color: #fff; transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 #modal-agregar-item input:focus,
 #modal-agregar-item select:focus,
-#modal-agregar-item textarea:focus {
-    border-color: #2563eb; /* focus:border-blue-500 */
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); /* Sombra de foco sutil */
-    outline: none;
+#modal-agregar-item textarea:focus,
+#modal-editar-item input:focus,
+#modal-editar-item select:focus,
+#modal-editar-item textarea:focus {
+    border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); outline: none;
 }
-#modal-agregar-item textarea {
-    min-height: 80px;
-    resize: vertical; /* Permitir redimensionar verticalmente */
+#modal-agregar-item textarea,
+#modal-editar-item textarea {
+    min-height: 80px; resize: vertical;
 }
-#modal-agregar-item select { /* Asegurar estilo de flecha también aquí */
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
+#modal-agregar-item select,
+#modal-editar-item select {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 0.5rem center;
-    background-repeat: no-repeat;
-    background-size: 1.5em 1.5em;
-    padding-right: 2.5rem;
+    background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem;
 }
 
-/* --- Mensajes de Feedback (Éxito, Error, Info, Warning) --- */
-.feedback-message {
-    padding: 1rem 1.5rem; /* Más padding */
-    margin-bottom: 1.5rem;
-    border-radius: 0.375rem; /* rounded-md */
-    border: 1px solid transparent;
-    font-size: 0.9rem;
-    display: flex; /* Para alinear icono si se añade */
-    align-items: center;
-    gap: 0.75rem; /* Espacio entre icono y texto */
-}
-/* .feedback-message .icon { font-size: 1.2em; } */ /* Estilo para icono */
-
-.feedback-message.success {
-    background-color: #dcfce7; /* green-100 */
-    border-color: #bbf7d0; /* green-200 */
-    color: #166534; /* green-800 */
-}
-.feedback-message.error {
-    background-color: #fee2e2; /* red-100 */
-    border-color: #fecaca; /* red-200 */
-    color: #991b1b; /* red-800 */
-}
-.feedback-message.warning {
-    background-color: #fef3c7; /* amber-100 */
-    border-color: #fde68a; /* amber-200 */
-    color: #92400e; /* amber-800 */
-}
-.feedback-message.info {
-    background-color: #dbeafe; /* blue-100 */
-    border-color: #bfdbfe; /* blue-200 */
-    color: #1e40af; /* blue-800 */
-}
-
+/* --- Mensajes de Feedback --- */
+/* Usando estilos de EstilosInventario.css original */
+.feedback-message { padding: 1rem 1.5rem; margin-bottom: 1.5rem; border-radius: 0.375rem; border: 1px solid transparent; font-size: 0.9rem; display: flex; align-items: center; gap: 0.75rem; }
+.feedback-message.success { background-color: #dcfce7; border-color: #bbf7d0; color: #166534; }
+.feedback-message.error { background-color: #fee2e2; border-color: #fecaca; color: #991b1b; }
+.feedback-message.warning { background-color: #fef3c7; border-color: #fde68a; color: #92400e; }
+.feedback-message.info { background-color: #dbeafe; border-color: #bfdbfe; color: #1e40af; }
 
 /* ========================================================================== */
-/* 5. Estilos Específicos de Módulo (Ej: Inventario)                         */
+/* 5. Estilos Específicos de Módulo (Inventario)                         */
 /* ========================================================================== */
-
-/* --- Encabezado del Módulo de Inventario --- */
-.inventory-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1.5rem; /* Separación antes de la barra de acciones/tabla */
-    flex-wrap: wrap; /* Para que se ajuste en pantallas pequeñas */
-    gap: 1rem; /* Espacio entre título y botones */
-}
-
-.inventory-title {
-    font-size: 1.75rem; /* text-2xl o 3xl */
-    font-weight: 700; /* font-bold */
-    color: #111827; /* gray-900 */
-}
-
-/* Añadir aquí otros estilos que SOLO se usen en la página de inventario */
-/* Por ejemplo, si hubiera tarjetas de resumen específicas, etc. */
-
+/* Usando estilos de EstilosInventario.css original */
+.inventory-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.inventory-title { font-size: 1.75rem; font-weight: 700; color: #111827; }
 
 /* ========================================================================== */
 /* 6. Media Queries (Responsividad)                                          */
 /* ========================================================================== */
-
+/* Usando estilos de EstilosInventario.css original */
 @media (min-width: 640px) { /* sm */
-    .header-container {
-        padding-left: 1.5rem; /* px-6 */
-        padding-right: 1.5rem;
-    }
-    /* Añadir más ajustes responsivos aquí */
+    .header-container { padding-left: 1.5rem; padding-right: 1.5rem; }
 }
-
 @media (min-width: 1024px) { /* lg */
-    .header-container {
-        padding-left: 2rem; /* px-8 */
-        padding-right: 2rem;
-    }
-     /* Añadir más ajustes responsivos aquí */
+    .header-container { padding-left: 2rem; padding-right: 2rem; }
 }
 
-/* Placeholder genérico para iconos si no usas una librería específica */
-.icon {
-    font-style: normal;
-    display: inline-block;
-    /* Considera usar SVGs o una librería de iconos (FontAwesome, Heroicons, etc.) */
-}
+/* ========================================================================== */
+/* 7. Estilos Específicos de Modales (Ver/Eliminar - Añadidos)               */
+/* ========================================================================== */
+
+/* --- Estilos Contenido Modal "Ver Detalle" --- */
+#modal-ver-item .modal-content { max-width: 600px; padding: 1.5rem 2rem 2rem 2rem; }
+#modal-ver-item .modal-body { padding-bottom: 1rem; }
+/* Estilos para la lista dl/dt/dd dentro de #modal-ver-item */
+#modal-ver-item dl.detail-list { display: grid; grid-template-columns: 130px 1fr; gap: 1rem 1.25rem; margin: 0; padding: 0; align-items: start; }
+#modal-ver-item dl.detail-list dt { grid-column: 1; font-weight: 500; color: #4b5563; text-align: left; font-size: 0.875rem; line-height: 1.5; margin: 0; padding: 0; }
+#modal-ver-item dl.detail-list dd { grid-column: 2; margin: 0; padding: 0 0 1rem 0; border: none; color: #1f2937; font-size: 0.875rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+/* Estilos para textos de carga y error dentro de #modal-ver-item */
+#modal-ver-item .loading-text, #modal-ver-item .error-text { text-align: center; padding: 3rem 1rem; color: #6b7280; font-size: 1rem; }
+#modal-ver-item .error-text { color: #b91c1c; font-weight: 500; background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 0.375rem; margin: 1rem 0; padding: 1.5rem; }
+#modal-ver-item .error-text strong { display: block; margin-bottom: 0.5rem; color: #991b1b; font-weight: 600; }
+
+/* --- Estilos Contenido Modal "Eliminar" --- */
+#modal-eliminar-item .confirm-text { margin-bottom: 1.5rem; text-align: center; font-size: 1rem; color: #374151; line-height: 1.6; }
+#modal-eliminar-item .item-name { font-weight: 600; color: #1f2937; }
+#modal-eliminar-item .warning-text { color: #dc2626; font-weight: 600; }
+#modal-eliminar-item .error-message { color: #b91c1c; margin-top: 1rem; font-size: 0.875rem; text-align: center; background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 0.375rem; padding: 1rem; display: none; /* Oculto por defecto */ }
+
+/* Placeholder genérico para iconos */
+.icon { font-style: normal; display: inline-block; }

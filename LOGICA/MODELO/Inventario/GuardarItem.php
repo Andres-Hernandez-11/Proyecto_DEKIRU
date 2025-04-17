@@ -2,138 +2,194 @@
 // Iniciar sesión para poder usar variables de sesión para mensajes
 session_start();
 
-// Incluir archivo de conexión
-// ¡ASEGÚRATE DE QUE LA RUTA SEA CORRECTA!
-require_once '../conexion.php'; // Asumiendo que está en la misma carpeta (CONTROLADOR)
+require_once '../conexion.php'; 
 
-// Verificar si la conexión se estableció correctamente
-if (!$conn) {
-    // Guardar mensaje de error en sesión y redirigir
+// --- Inicialización de Variables ---
+$mensaje = 'Acción no válida.'; // Mensaje por defecto
+$tipo_mensaje = 'error';      // Tipo de mensaje por defecto
+$conn_closed = false;         // Bandera para saber si la conexión ya se cerró
+
+// --- Verificar Conexión ---
+if (empty($conn) || !($conn instanceof mysqli)) {
     $_SESSION['mensaje'] = "Error crítico: No se pudo conectar a la base de datos.";
     $_SESSION['tipo_mensaje'] = "error";
-    // Redirigir a una página de error o al inventario (ajusta según necesidad)
-    header('Location: ../VISTA/InventarioStart.php'); // Ajusta la ruta de redirección
+    header('Location: ../../VISTA/InventarioStart.php'); // Ajusta la ruta de redirección
     exit();
 }
 
-// Verificar si se recibieron datos por POST
+// --- Procesar Solicitud POST ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // 1. Recuperar datos del formulario (usando null coalescing ?? para evitar warnings)
+    // 1. Recuperar datos del formulario (comunes para INSERT y UPDATE)
+    $id_producto_editar = filter_input(INPUT_POST, 'id_producto', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]); // Validar ID para edición
     $nombre = trim($_POST['nombre'] ?? '');
     $categoria_seleccionada = trim($_POST['categoria'] ?? '');
-    $nueva_categoria = trim($_POST['nueva_categoria'] ?? '');
-    $stock = $_POST['stock'] ?? 0; // Default a 0 si no se envía
-    $stock_minimo = $_POST['stock_minimo'] ?? 0; // Default a 0
+    $nueva_categoria = trim($_POST['nueva_categoria'] ?? ''); // Solo relevante para INSERT
+    $stock = filter_input(INPUT_POST, 'stock', FILTER_VALIDATE_INT);
+    $stock_minimo = filter_input(INPUT_POST, 'stock_minimo', FILTER_VALIDATE_INT);
     $unidad_medida = trim($_POST['unidad_medida'] ?? '');
-    $precio_unitario = $_POST['precio_unitario'] ?? null; // Permitir NULL o 0
+    $precio_unitario_str = str_replace(',', '.', trim($_POST['precio_unitario'] ?? '')); // Reemplazar coma por punto
+    $precio_unitario = filter_var($precio_unitario_str, FILTER_VALIDATE_FLOAT);
     $ubicacion = trim($_POST['ubicacion'] ?? '');
-    $id_proveedor = $_POST['id_proveedor'] ?? ''; // Puede ser '' si no se selecciona
+    $id_proveedor = filter_input(INPUT_POST, 'id_proveedor', FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
     $descripcion = trim($_POST['descripcion'] ?? '');
 
-    // 2. Validación básica (añade más validaciones según necesites)
+    // 2. Validación básica (común)
     if (empty($nombre)) {
-        $_SESSION['mensaje'] = "El nombre del producto es obligatorio.";
-        $_SESSION['tipo_mensaje'] = "error";
-        header('Location: ../VISTA/InventarioStart.php'); // Redirigir de vuelta
-        exit();
-    }
-
-    // 3. Determinar la categoría a usar
-    $categoria_final = '';
-    if ($categoria_seleccionada === '__NUEVA__') {
-        if (!empty($nueva_categoria)) {
-            $categoria_final = $nueva_categoria;
-            // Opcional: Podrías verificar si esta nueva categoría ya existe
-            // y/o añadirla a una tabla separada de categorías si la tuvieras.
-        } else {
-            // Error si se seleccionó nueva pero no se escribió nada
-            $_SESSION['mensaje'] = "Por favor, especifica el nombre de la nueva categoría.";
-            $_SESSION['tipo_mensaje'] = "error";
-            header('Location: ../VISTA/InventarioStart.php');
-            exit();
-        }
+        $mensaje = "El nombre del producto es obligatorio.";
+        // No salimos aún, cerramos conexión y redirigimos al final
+    } elseif ($stock === false || $stock < 0) { // Validar stock como entero >= 0
+        $mensaje = "El stock debe ser un número entero igual o mayor a cero.";
+    } elseif ($stock_minimo !== null && ($stock_minimo === false || $stock_minimo < 0)) { // Validar stock mínimo si se proporciona
+         $mensaje = "El stock mínimo debe ser un número entero igual o mayor a cero.";
+    } elseif ($precio_unitario_str !== '' && $precio_unitario === false) { // Validar precio si se proporciona
+         $mensaje = "El precio unitario no es un número válido.";
     } else {
-        $categoria_final = $categoria_seleccionada;
-    }
+        // Las validaciones básicas pasaron, proceder con INSERT o UPDATE
 
-    // Validar que la categoría final no esté vacía si es obligatoria en tu lógica
-    // if (empty($categoria_final)) { ... }
+        // Convertir valores a tipos adecuados o NULL
+        $stock_int = ($stock !== false) ? (int)$stock : 0; // Default 0 si falla validación (aunque ya se validó)
+        $stock_minimo_int = ($stock_minimo !== null && $stock_minimo !== false) ? (int)$stock_minimo : null; // Permitir NULL
+        $precio_decimal = ($precio_unitario !== false && $precio_unitario_str !== '') ? (float)$precio_unitario : null; // Permitir NULL
+        $proveedor_id_int = ($id_proveedor !== false && $id_proveedor !== null) ? (int)$id_proveedor : null; // Permitir NULL
 
+        // 3. Determinar si es INSERT o UPDATE
+        if ($id_producto_editar) {
+            // --- LÓGICA DE ACTUALIZACIÓN (UPDATE) ---
+            $mensaje = "Intentando actualizar ítem ID: " . $id_producto_editar; // Mensaje temporal
 
-    // 4. Preparar la consulta SQL INSERT usando sentencias preparadas
-    $sql = "INSERT INTO PRODUCTO (nombre, categoria, descripcion, stock, precio_unitario, stock_minimo, unidad_medida, ubicacion, id_proveedor)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            // Preparar la consulta UPDATE
+            $sql = "UPDATE PRODUCTO SET
+                        nombre = ?,
+                        categoria = ?,
+                        descripcion = ?,
+                        stock = ?,
+                        precio_unitario = ?,
+                        stock_minimo = ?,
+                        unidad_medida = ?,
+                        ubicacion = ?,
+                        id_proveedor = ?
+                    WHERE id_producto = ?"; // Condición WHERE
 
-    $stmt = $conn->prepare($sql);
+            $stmt = $conn->prepare($sql);
 
-    if ($stmt === false) {
-        // Error al preparar la consulta
-        $_SESSION['mensaje'] = "Error al preparar la consulta: " . $conn->error;
-        $_SESSION['tipo_mensaje'] = "error";
-        header('Location: ../VISTA/InventarioStart.php');
-        exit();
-    }
+            if ($stmt === false) {
+                $mensaje = "Error al preparar la consulta UPDATE: " . htmlspecialchars($conn->error);
+            } else {
+                // Vincular parámetros para UPDATE
+                // Tipos: s (nombre), s (categoria), s (descripcion), i (stock), d (precio), i (stock_minimo), s (unidad), s (ubicacion), i (id_proveedor), i (id_producto WHERE)
+                $types = "sssidissii";
+                $stmt->bind_param(
+                    $types,
+                    $nombre,
+                    $categoria_seleccionada, // Usar la categoría seleccionada directamente
+                    $descripcion,
+                    $stock_int,
+                    $precio_decimal,
+                    $stock_minimo_int,
+                    $unidad_medida,
+                    $ubicacion,
+                    $proveedor_id_int,
+                    $id_producto_editar // ID para el WHERE
+                );
 
-    // 5. Vincular parámetros
-    // Determinar el tipo de datos: s=string, i=integer, d=double, b=blob
-    $types = "sssidisss"; // Ajusta según los tipos de tus columnas
+                // Ejecutar la consulta UPDATE
+                if ($stmt->execute()) {
+                    if ($stmt->affected_rows > 0) {
+                        $mensaje = "Ítem '" . htmlspecialchars($nombre) . "' (ID: " . $id_producto_editar . ") actualizado exitosamente.";
+                        $tipo_mensaje = "success";
+                    } else {
+                        // No hubo error, pero no se modificó ninguna fila (quizás los datos eran iguales)
+                        $mensaje = "No se realizaron cambios en el ítem '" . htmlspecialchars($nombre) . "' (ID: " . $id_producto_editar . "). Los datos pueden ser los mismos.";
+                        $tipo_mensaje = "info"; // O 'warning'
+                    }
+                } else {
+                    // Error al ejecutar UPDATE
+                    $mensaje = "Error al actualizar el ítem: (" . $stmt->errno . ") " . htmlspecialchars($stmt->error);
+                }
+                $stmt->close();
+            } // Fin if ($stmt)
 
-    // Convertir números y manejar proveedor NULL si está vacío
-    $stock_int = (int)$stock;
-    $stock_minimo_int = (int)$stock_minimo;
-    $precio_decimal = ($precio_unitario !== null && $precio_unitario !== '') ? (float)$precio_unitario : null;
-    $proveedor_id = ($id_proveedor !== '') ? (int)$id_proveedor : null; // Convertir a NULL si está vacío
-
-    $stmt->bind_param(
-        $types,
-        $nombre,
-        $categoria_final,
-        $descripcion,
-        $stock_int,
-        $precio_decimal,
-        $stock_minimo_int,
-        $unidad_medida,
-        $ubicacion,
-        $proveedor_id
-    );
-
-    // 6. Ejecutar la consulta
-    if ($stmt->execute()) {
-        // Éxito
-        if ($stmt->affected_rows > 0) {
-            $_SESSION['mensaje'] = "Ítem '" . htmlspecialchars($nombre) . "' agregado exitosamente al inventario.";
-            $_SESSION['tipo_mensaje'] = "success";
         } else {
-            // No se insertó fila, podría ser un error silencioso o no esperado
-             $_SESSION['mensaje'] = "El ítem no pudo ser agregado (0 filas afectadas).";
-             $_SESSION['tipo_mensaje'] = "warning";
-        }
-    } else {
-        // Error al ejecutar
-        // En producción, loggear el error en lugar de mostrarlo directamente
-        // error_log("Error al guardar ítem: " . $stmt->error);
-        $_SESSION['mensaje'] = "Error al guardar el ítem: " . $stmt->error; // Mostrar error (cuidado en producción)
-        $_SESSION['tipo_mensaje'] = "error";
-    }
+            // --- LÓGICA DE INSERCIÓN (INSERT) ---
+            $mensaje = "Intentando agregar nuevo ítem."; // Mensaje temporal
 
-    // 7. Cerrar statement
-    $stmt->close();
+            // Determinar la categoría final (manejo de nueva categoría)
+            $categoria_final = '';
+            if ($categoria_seleccionada === '__NUEVA__') {
+                if (!empty($nueva_categoria)) {
+                    $categoria_final = $nueva_categoria;
+                } else {
+                    $mensaje = "Por favor, especifica el nombre de la nueva categoría.";
+                    // Salta a la sección de cierre y redirección
+                    goto end_logic; // Usamos goto para evitar anidación excesiva
+                }
+            } else {
+                $categoria_final = $categoria_seleccionada;
+            }
+
+            // Preparar la consulta INSERT
+            $sql = "INSERT INTO PRODUCTO (nombre, categoria, descripcion, stock, precio_unitario, stock_minimo, unidad_medida, ubicacion, id_proveedor)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+            $stmt = $conn->prepare($sql);
+
+            if ($stmt === false) {
+                $mensaje = "Error al preparar la consulta INSERT: " . htmlspecialchars($conn->error);
+            } else {
+                // Vincular parámetros para INSERT
+                // Tipos: s (nombre), s (categoria), s (descripcion), i (stock), d (precio), i (stock_minimo), s (unidad), s (ubicacion), i (id_proveedor)
+                $types = "sssidissi";
+                $stmt->bind_param(
+                    $types,
+                    $nombre,
+                    $categoria_final,
+                    $descripcion,
+                    $stock_int,
+                    $precio_decimal,
+                    $stock_minimo_int,
+                    $unidad_medida,
+                    $ubicacion,
+                    $proveedor_id_int
+                );
+
+                // Ejecutar la consulta INSERT
+                if ($stmt->execute()) {
+                    if ($stmt->affected_rows > 0) {
+                        $_SESSION['mensaje'] = "Ítem '" . htmlspecialchars($nombre) . "' agregado exitosamente.";
+                        $_SESSION['tipo_mensaje'] = "success";
+                    } else {
+                        $_SESSION['mensaje'] = "El ítem no pudo ser agregado (0 filas afectadas).";
+                        $_SESSION['tipo_mensaje'] = "warning";
+                    }
+                } else {
+                    $_SESSION['mensaje'] = "Error al guardar el nuevo ítem: (" . $stmt->errno . ") " . htmlspecialchars($stmt->error);
+                    $_SESSION['tipo_mensaje'] = "error";
+                }
+                $stmt->close();
+            } // Fin if ($stmt)
+        } // Fin else (INSERT)
+    } // Fin else (Validaciones básicas pasaron)
 
 } else {
     // Si no se accedió por POST
-    $_SESSION['mensaje'] = "Acceso no válido para guardar ítem.";
-    $_SESSION['tipo_mensaje'] = "error";
+    $mensaje = "Acceso no válido para guardar/editar ítem.";
 }
 
-// 8. Cerrar conexión
-if ($conn) {
+// --- Etiqueta para goto (evita cerrar conexión dos veces si falla validación de categoría) ---
+end_logic:
+
+// --- Guardar Mensaje y Cerrar Conexión (si no se cerró antes) ---
+$_SESSION['mensaje'] = $mensaje;
+$_SESSION['tipo_mensaje'] = $tipo_mensaje;
+
+if (!$conn_closed && $conn) {
     $conn->close();
 }
 
-// 9. Redirigir siempre de vuelta a la página de inventario
-// Asegúrate que la ruta sea correcta a tu archivo principal de inventario
-header('Location: ../VISTA/InventarioStart.php');
+// --- Redirigir Siempre ---
+// ¡ASEGÚRATE DE QUE LA RUTA SEA CORRECTA!
+header('Location: ../../VISTA/InventarioStart.php');
 exit();
 
 ?>
