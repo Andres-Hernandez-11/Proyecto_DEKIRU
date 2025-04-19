@@ -11,7 +11,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Inventario - Rápidos del Altiplano</title>
 
-    <link rel="stylesheet" href="..\VISTA\EstilosInventario.css" />
+    <link rel="stylesheet" href="..\VISTA\Inventario\EstilosInventario.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>

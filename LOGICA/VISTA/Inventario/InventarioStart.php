@@ -16,7 +16,7 @@ require_once '../MODELO/Inventario/Inventario.php';
 // 3. Incluir el archivo de la vista (HTML) DESPUÉS
 // Este archivo usará las variables que se definieron en el paso anterior.
 // Asegúrate de que la ruta sea correcta.
-require_once '../VISTA/Inventario.php';
+require_once '../VISTA/Inventario/Inventario.php';
 
 ?>
 
