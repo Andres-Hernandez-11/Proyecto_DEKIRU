@@ -1,0 +1,425 @@
+/* Estilos generales para la sección de CRUD */
+.crud-section {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px; /* Espacio inferior para separar secciones si es necesario */
+}
+
+.crud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.crud-header h2 {
+  margin: 0;
+  font-size: 1.5em;
+  color: #333;
+}
+
+.add-new-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.add-new-button:hover {
+  background-color: #0056b3;
+}
+
+.add-new-button i {
+  margin-right: 5px;
+}
+
+/* Barra de búsqueda y filtros */
+.search-filter-bar {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 5px 10px;
+  /* Aumentamos el flex-grow para que ocupe más espacio */
+  flex-grow: 2; /* Puedes probar con valores más grandes como 3 o 4 */
+}
+
+.search-input i {
+  margin-right: 5px;
+  color: #777;
+}
+
+.search-input input[type="text"] {
+  border: none;
+  outline: none;
+  flex-grow: 1; /* El input dentro también puede crecer */
+  font-size: 1em;
+} 
+
+.filter-controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.filter-controls select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.filter-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.filter-button:hover {
+  background-color: #1e7e34;
+}
+
+/* Tabla de datos */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  overflow: hidden; /* Para que el borde redondeado funcione en la tabla */
+}
+
+.data-table th, .data-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.data-table th {
+  background-color: #f8f9fa;
+  font-weight: bold;
+  color: #333;
+}
+
+.data-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.data-table tbody tr:hover {
+  background-color: #e0e0e0;
+}
+
+.actions {
+  text-align: center;
+}
+
+.actions a {
+  display: inline-block;
+  margin: 0 5px;
+  text-decoration: none;
+  font-size: 1em;
+  border-radius: 5px;
+  padding: 5px 8px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button {
+  background-color: #007bff;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+}
+
+
+/* Estilos para el modal */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto; /* Ajuste del margen superior para centrar verticalmente un poco más arriba */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%; /* Ajuste del ancho para que sea más amplio */
+  max-width: 600px; /* Ancho máximo para evitar que se extienda demasiado en pantallas grandes */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.close-button {
+  color: #aaa;
+  position: absolute; /* Para colocarlo en la esquina superior derecha */
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-button:hover,
+.close-button:focus {
+  color: black;
+  text-decoration: none;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 1.8em; /* Aumento del tamaño del título */
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="date"],
+.modal-content select,
+.modal-content textarea {
+  width: calc(100% - 22px);
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 1em;
+}
+
+.modal-content select {
+  /* Estilos adicionales para el select si es necesario */
+  appearance: none; /* Para quitar los estilos por defecto del navegador */
+  background-image: url('data:image/svg+xml;utf8,<svg fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 10px top 50%;
+  background-size: 16px;
+  padding-right: 30px; /* Espacio para la flecha */
+}
+
+.modal-content textarea {
+  resize: vertical; /* Permite redimensionar verticalmente */
+  min-height: 80px; /* Altura mínima para el textarea */
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1em;
+  transition: background-color 0.3s ease;
+}
+
+.modal-actions .btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.modal-actions .btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.modal-actions .btn-secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.modal-actions .btn-secondary:hover {
+  background-color: #545b62;
+}
+
+.modal-actions .btn-delete {
+  background-color: #a71111;
+  color: white;
+}
+
+.modal-actions .btn-delete:hover {
+  background-color: #810707;
+}
+
+
+
+
+
+
+
+
+
+/* ... (todos los estilos CSS que ya tenías) ... */
+
+/* --- Barra de Acciones (Filtros, Búsqueda, etc.) --- */
+.action-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  padding: 1rem;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  margin-bottom: 1.5rem;
+  border: 1px solid #e5e7eb;
+  align-items: center; /* Alinea verticalmente los elementos */
+}
+
+.action-bar .search-field {
+  flex-grow: 1;
+  min-width: 200px;
+  display: flex;
+  align-items: center;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0 0.75rem;
+  background-color: #fff;
+  height: 38px;
+}
+
+.action-bar .search-field input[type="search"] {
+  border: none;
+  outline: none;
+  width: 100%;
+  margin-left: 0.5rem;
+  padding: 0.5rem 0;
+  background: transparent;
+  height: auto;
+}
+
+.action-bar .search-field .icon {
+  color: #6b7280;
+  flex-shrink: 0;
+  font-style: normal;
+}
+
+.action-bar select,
+.action-bar .checkbox-container {
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 0.875rem;
+  height: 38px;
+  display: flex;
+  align-items: center;
+}
+
+.action-bar select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.action-bar .checkbox-container {
+  padding-right: 0.5rem;
+  border: none;
+  background: none;
+  height: auto;
+}
+
+.action-bar .checkbox-container input[type="checkbox"] {
+  margin-right: 0.5rem;
+  height: 1rem;
+  width: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  cursor: pointer;
+}
+
+.action-bar .checkbox-container label {
+  cursor: pointer;
+  color: #374151;
+  font-weight: 500;
+}
+
+.action-bar .btn {
+  display: inline-block;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #374151;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  background-color: transparent;
+  border: 1px solid #d1d5db;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  height: 38px;
+}
+
+.action-bar .btn:hover {
+  color: #1e293b;
+  border-color: #a1aab7;
+}
+
+.action-bar .btn-secondary {
+  color: #374151;
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.action-bar .btn-secondary:hover {
+  color: #1e293b;
+  background-color: #edf2f7;
+  border-color: #a1aab7;
+}
+
