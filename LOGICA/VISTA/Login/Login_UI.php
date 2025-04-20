@@ -29,8 +29,8 @@ if (isset($_SESSION['datos_registro'])) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login - ERP Rápidos del Altiplano</title>
-  <link rel="icon" type="image/png" href="../../IMAGENES/IconoWeb.png" />
-  <link rel="stylesheet" href="../VISTA/EstilosLogin.css" />
+  <link rel="icon" type="image/png" href="../../../IMAGENES/IconoWeb.png" />
+  <link rel="stylesheet" href="../Login/EstilosLogin.css" />
   <link rel="stylesheet" href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"/>
 </head>
 <body>
@@ -52,9 +52,9 @@ if (isset($_SESSION['datos_registro'])) {
 <?php endif; ?>
 
 <div class="logos">
-  <img src="../../IMAGENES/LogoRapidosDelAltiplano.jpg" alt="Rápidos del Altiplano" class="logo" />
+  <img src="../../../IMAGENES/LogoRapidosDelAltiplano.jpg" alt="Rápidos del Altiplano" class="logo" />
   <div class="divider"></div>
-  <img src="../../IMAGENES/Logodekiru.jpg" alt="Dekiru" class="logo dekiru" />
+  <img src="../../../IMAGENES/Logodekiru.jpg" alt="Dekiru" class="logo dekiru" />
 </div>
 
 <div class="container">
@@ -62,7 +62,7 @@ if (isset($_SESSION['datos_registro'])) {
 
   <div class="form-wrapper">
     <!-- Formulario Login -->
-    <form id="login-form" class="form visible" method="POST" action="../MODELO/login.php">
+    <form id="login-form" class="form visible" method="POST" action="../../MODELO/login.php">
       <div class="input-container">
         <i class='bx bx-envelope'></i>
         <input type="text" name="correo" placeholder="Correo electrónico" class="input-field" required />
@@ -79,7 +79,7 @@ if (isset($_SESSION['datos_registro'])) {
     </form>
 
     <!-- Formulario Registro -->
-    <form id="register-form" class="form hidden" method="POST" action="../MODELO/register.php">
+    <form id="register-form" class="form hidden" method="POST" action="../../MODELO/register.php">
       <div class="input-container">
         <i class='bx bx-user'></i>
         <input type="text" name="nombre" placeholder="Nombre" class="input-field" required

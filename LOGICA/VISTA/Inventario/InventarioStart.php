@@ -11,12 +11,12 @@ ini_set('display_errors', 1);
 // Esto conectará a la BD, procesará filtros, obtendrá datos
 // y definirá variables como $inventario_paginado, $total_items, etc.
 // Asegúrate de que la ruta sea correcta.
-require_once '../MODELO/Inventario/Inventario.php';
+require_once '../../MODELO/Inventario/Inventario.php';
 
 // 3. Incluir el archivo de la vista (HTML) DESPUÉS
 // Este archivo usará las variables que se definieron en el paso anterior.
 // Asegúrate de que la ruta sea correcta.
-require_once '../VISTA/Inventario/Inventario.php';
+require_once 'Inventario.php';
 
 ?>
 

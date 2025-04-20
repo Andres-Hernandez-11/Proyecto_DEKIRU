@@ -6,7 +6,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
 // Incluir archivo de conexión
 // ¡ASEGÚRATE DE QUE LA RUTA SEA CORRECTA DESDE InventarioStart.php!
-require_once '..\MODELO\conexion.php';
+require_once '../../MODELO/conexion.php';
 
 // Verificar si la conexión se estableció correctamente (la variable $conn viene de conexion.php)
 if (!$conn) {

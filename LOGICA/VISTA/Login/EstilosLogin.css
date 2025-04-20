@@ -1,5 +1,5 @@
 body {
-    background: url('../../IMAGENES/FondoLogin.jpg') no-repeat center center/cover;
+    background: url('../../../IMAGENES/FondoLogin.jpg') no-repeat center center/cover;
     margin: 0;
     padding: 0;
     height: 100vh;

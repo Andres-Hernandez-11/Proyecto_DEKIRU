@@ -11,7 +11,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Inventario - Rápidos del Altiplano</title>
 
-    <link rel="stylesheet" href="..\VISTA\Inventario\EstilosInventario.css" />
+    <link rel="stylesheet" href="..\Inventario\EstilosInventario.css" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,21 +23,21 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <aside class="sidebar">
              <div class="sidebar-header">
                  <div class="sidebar-logo-container">
-                     <img src="..\..\IMAGENES\LogoRapidosDelAltiplano.jpg" alt="Logo Rápidos del Altiplano" class="sidebar-logo" onerror="this.onerror=null; this.src='https://placehold.co/150x50/cccccc/333333?text=Logo'; this.alt='Logo Placeholder';">
+                     <img src="..\..\..\IMAGENES\LogoRapidosDelAltiplano.jpg" alt="Logo Rápidos del Altiplano" class="sidebar-logo" onerror="this.onerror=null; this.src='https://placehold.co/150x50/cccccc/333333?text=Logo'; this.alt='Logo Placeholder';">
                  </div>
                 <h2 class="sidebar-title">Menú Principal</h2>
             </div>
             <nav class="sidebar-nav">
                 <?php
                 // Rutas ajustadas asumiendo que VISTA está un nivel dentro del proyecto
-                $nav_links =[
-                    'Dashboard.php' => ['icon' => '../../IMAGENES/Dashboard.png', 'text' => 'Dashboard (Inicio)', 'alt' => 'Icono Dashboard'],
-                    'Clientes.php' => ['icon' => '../../IMAGENES/Clientes.png', 'text' => 'Clientes', 'alt' => 'Icono Clientes'], // Asume Clientes.php
-                    'InventarioStart.php' => ['icon' => '../../IMAGENES/Inventario.png', 'text' => 'Inventario', 'alt' => 'Icono Inventario'],
-                    'Ventas.php' => ['icon' => '../../IMAGENES/Ventas-Compras.png', 'text' => 'Ventas-Compras', 'alt' => 'Icono Ventas'], // Asume Ventas.php
-                    'RRHH.php' => ['icon' => '../../IMAGENES/RH.png', 'text' => 'Recursos Humanos', 'alt' => 'Icono Recursos Humanos'], // Asume RRHH.php
-                    'Contabilidad.php' => ['icon' => '../../IMAGENES/Contabilidad.png', 'text' => 'Contabilidad', 'alt' => 'Icono Contabilidad'], // Asume Contabilidad.php
-                    'Configuracion.php' => ['icon' => '../../IMAGENES/Configuracion.png', 'text' => 'Configuración', 'alt' => 'Icono Configuración'] // Asume Configuracion.php
+                $nav_links = [
+                    '../Dashboard/Dashboard.php' => ['icon' => '../../../IMAGENES/Dashboard.png', 'text' => 'Dashboard (Inicio)', 'alt' => 'Icono Dashboard'],
+                    'Clientes.php' => ['icon' => '../../../IMAGENES/Clientes.png', 'text' => 'Clientes', 'alt' => 'Icono Clientes'], // Asume Clientes.php
+                    '../Inventario/InventarioStart.php' => ['icon' => '../../../IMAGENES/Inventario.png', 'text' => 'Inventario', 'alt' => 'Icono Inventario'],
+                    'Ventas.php' => ['icon' => '../../../IMAGENES/Ventas-Compras.png', 'text' => 'Ventas-Compras', 'alt' => 'Icono Ventas'], // Asume Ventas.php
+                    'RRHH.php' => ['icon' => '../../../IMAGENES/RH.png', 'text' => 'Recursos Humanos', 'alt' => 'Icono Recursos Humanos'], // Asume RRHH.php
+                    'Contabilidad.php' => ['icon' => '../../../IMAGENES/Contabilidad.png', 'text' => 'Contabilidad', 'alt' => 'Icono Contabilidad'], // Asume Contabilidad.php
+                    'Configuracion.php' => ['icon' => '../../../IMAGENES/Configuracion.png', 'text' => 'Configuración', 'alt' => 'Icono Configuración'] // Asume Configuracion.php
                 ];
                 ?>
                 <?php foreach ($nav_links as $file => $link): ?>
@@ -62,7 +62,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                          <span class="user-info">
                              Bienvenido, <?php echo isset($_SESSION['nombre_usuario']) ? htmlspecialchars($_SESSION['nombre_usuario']) : 'Invitado'; ?>
                          </span>
-                         <a href="../MODELO/CerrarSesion.php" class="logout-button btn ">
+                         <a href="../../MODELO/CerrarSesion.php" class="logout-button btn ">
                              <span class="icon"></span> Cerrar Sesión
                          </a>
                      </div>
@@ -221,7 +221,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <h2 class="modal-title">Agregar Nuevo Ítem</h2>
                 <button id="modal-agregar-close-btn" class="modal-close-btn" aria-label="Cerrar">&times;</button>
             </div>
-            <form id="form-agregar-item" action="../MODELO/Inventario/GuardarItem.php" method="POST">
+            <form id="form-agregar-item" action="../../MODELO/Inventario/GuardarItem.php" method="POST">
                 <div class="modal-body">
                     <div class="modal-form-grid">
                         <div class="modal-form-group"><label for="modal-agregar-nombre">Nombre:</label><input type="text" id="modal-agregar-nombre" name="nombre" required></div>
@@ -267,7 +267,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <h2 class="modal-title">Editar Ítem</h2>
                 <button id="modal-editar-close-btn" class="modal-close-btn" aria-label="Cerrar">&times;</button>
             </div>
-             <form id="form-editar-item" action="../MODELO/Inventario/GuardarItem.php" method="POST">
+             <form id="form-editar-item" action="../../MODELO/Inventario/GuardarItem.php" method="POST">
                  <input type="hidden" id="modal-editar-id_producto" name="id_producto">
                  <div class="modal-body">
                      <div id="modal-editar-loading" class="loading-text" style="display: none; text-align: center; padding: 2rem;">Cargando datos...</div>
@@ -488,7 +488,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                     try {
                         // FETCH a VerItem.php
-                        const response = await fetch(`../MODELO/Inventario/Ver.php?id=${encodeURIComponent(itemId)}`);
+                        const response = await fetch(`../../MODELO/Inventario/Ver.php?id=${encodeURIComponent(itemId)}`);
                         if (!response.ok) {
                             let errorMsg = `Error HTTP ${response.status}: ${response.statusText}`;
                             try { const errorData = await response.json(); if (errorData.error) errorMsg = errorData.error; } catch (e) {}
@@ -565,7 +565,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
 
                     try {
                          // FETCH a VerItem.php para obtener datos
-                        const response = await fetch(`../MODELO/Inventario/Ver.php?id=${encodeURIComponent(itemId)}`);
+                        const response = await fetch(`../../MODELO/Inventario/Ver.php?id=${encodeURIComponent(itemId)}`);
                         if (!response.ok) {
                              let errorMsg = `Error HTTP ${response.status}: ${response.statusText}`;
                              try { const errorData = await response.json(); if (errorData.error) errorMsg = errorData.error; } catch (e) {}
@@ -667,7 +667,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                      if(modalEliminarError) { modalEliminarError.textContent = ''; modalEliminarError.style.display = 'none';}
 
                      // FETCH a EliminarItem.php
-                     const url = `../MODELO/Inventario/EliminarItem.php?id=${encodeURIComponent(itemId)}`;
+                     const url = `../../MODELO/Inventario/EliminarItem.php?id=${encodeURIComponent(itemId)}`;
 
                      try {
                          const response = await fetch(url, { method: 'GET' });

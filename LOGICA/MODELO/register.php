@@ -28,7 +28,7 @@ $_SESSION['formulario'] = 'register'; // Para que se quede en el formulario de r
 if (empty($nombre) || empty($apellido) || empty($correo) || empty($usuario) || empty($password) || empty($confirmPassword)) {
     $_SESSION['mensaje'] = "Todos los campos son obligatorios.";
     $_SESSION['tipo_mensaje'] = "error"; // ✅ Tipo de mensaje: error
-    header("Location: ../VISTA/Login_UI.php");
+    header("Location: ../VISTA/Login/Login_UI.php");
     exit();
 }
 
@@ -36,7 +36,7 @@ if (empty($nombre) || empty($apellido) || empty($correo) || empty($usuario) || e
 if ($password !== $confirmPassword) {
     $_SESSION['mensaje'] = "Las contraseñas no coinciden.";
     $_SESSION['tipo_mensaje'] = "error"; // ✅ Tipo de mensaje: error
-    header("Location: ../VISTA/Login_UI.php");
+    header("Location: ../VISTA/Login/Login_UI.php");
     exit();
 }
 
@@ -44,7 +44,7 @@ if ($password !== $confirmPassword) {
 if (!preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&.,#\-_=+])[A-Za-z\d@$!%*?&.,#\-_=+]{8,}$/', $password)) {
     $_SESSION['mensaje'] = "La contraseña debe tener al menos 8 caracteres, incluyendo una mayúscula, una minúscula, un número y un carácter especial.";
     $_SESSION['tipo_mensaje'] = "error"; // ✅ Tipo de mensaje: error
-    header("Location: ../VISTA/Login_UI.php");
+    header("Location: ../VISTA/Login/Login_UI.php");
     exit();
 }
 
@@ -59,7 +59,7 @@ if ($stmt->num_rows > 0) {
     $_SESSION['mensaje'] = "El correo o nombre de usuario ya está registrado.";
     $_SESSION['tipo_mensaje'] = "error"; // ✅ Tipo de mensaje: error
     $stmt->close();
-    header("Location: ../VISTA/Login_UI.php");
+    header("Location: ../VISTA/Login/Login_UI.php");
     exit();
 }
 $stmt->close();
@@ -76,12 +76,12 @@ if ($stmt->execute()) {
     $_SESSION['mensaje'] = "Usuario registrado con éxito. Ahora puedes iniciar sesión.";
     $_SESSION['tipo_mensaje'] = "success";
     $_SESSION['formulario'] = 'login';
-    header("Location: ../VISTA/Login_UI.php");
+    header("Location: ../VISTA/Login/Login_UI.php");
     exit();
 } else {
     $_SESSION['mensaje'] = "Error al registrar usuario. Intenta nuevamente.";
     $_SESSION['tipo_mensaje'] = "error";
-    header("Location: ../VISTA/Login_UI.php");
+    header("Location: ../VISTA/Login/Login_UI.php");
     exit();
 }
 

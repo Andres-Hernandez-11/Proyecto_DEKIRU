@@ -13,7 +13,7 @@ $conn_closed = false;         // Bandera para saber si la conexión ya se cerró
 if (empty($conn) || !($conn instanceof mysqli)) {
     $_SESSION['mensaje'] = "Error crítico: No se pudo conectar a la base de datos.";
     $_SESSION['tipo_mensaje'] = "error";
-    header('Location: ../../VISTA/InventarioStart.php'); // Ajusta la ruta de redirección
+    header('Location: ../../VISTA/Inventario/InventarioStart.php'); // Ajusta la ruta de redirección
     exit();
 }
 
@@ -189,7 +189,7 @@ if (!$conn_closed && $conn) {
 
 // --- Redirigir Siempre ---
 // ¡ASEGÚRATE DE QUE LA RUTA SEA CORRECTA!
-header('Location: ../../VISTA/InventarioStart.php');
+header('Location: ../../VISTA/Inventario/InventarioStart.php');
 exit();
 
 ?>

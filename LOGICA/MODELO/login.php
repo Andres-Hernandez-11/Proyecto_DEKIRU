@@ -28,7 +28,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // Manejo de error - Podrías loggear el error $conn->error
         $_SESSION['mensaje'] = "Error interno del servidor al preparar la consulta.";
         $_SESSION['tipo_mensaje'] = "error";
-        header("Location: ../VISTA/Login_UI.php");
+        header("Location: ../VISTA/Login/Login_UI.php");
         exit();
     }
 
@@ -62,21 +62,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             unset($_SESSION['formulario']);
 
             // Redirigir al dashboard o página principal
-            header("Location: ../VISTA/Dashboard.php"); // Asegúrate que el dashboard sea .php
+            header("Location: ../VISTA/Dashboard/Dashboard.php"); // Asegúrate que el dashboard sea .php
             exit; // Detiene el script para que veas la salida
 
         } else {
             // Contraseña incorrecta
             $_SESSION['mensaje'] = "Correo o contraseña incorrectos.";
             $_SESSION['tipo_mensaje'] = "error";
-            header("Location: ../VISTA/Login_UI.php");
+            header("Location: ../VISTA/Login/Login_UI.php");
             exit();
         }
     } else {
         // Usuario no encontrado (correo incorrecto)
         $_SESSION['mensaje'] = "Correo o contraseña incorrectos.";
         $_SESSION['tipo_mensaje'] = "error";
-        header("Location: ../VISTA/Login_UI.php");
+        header("Location: ../VISTA/Login/Login_UI.php");
         exit();
     }
 
@@ -88,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Si se intenta acceder al script directamente sin método POST
     $_SESSION['mensaje'] = "Acceso no autorizado.";
     $_SESSION['tipo_mensaje'] = "error";
-    header("Location: ../VISTA/Login_UI.php");
+    header("Location: ../VISTA/Login/Login_UI.php");
     exit();
 }
 ?>

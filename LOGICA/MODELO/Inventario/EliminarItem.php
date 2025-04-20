@@ -9,7 +9,7 @@ require_once '../conexion.php'; // Asumiendo que está en CONTROLADOR
 if (!$conn) {
     $_SESSION['mensaje'] = "Error crítico: No se pudo conectar a la base de datos.";
     $_SESSION['tipo_mensaje'] = "error";
-    header('Location: ../../VISTA/InventarioStart.php'); // Ajusta la ruta de redirección
+    header('Location: ../../VISTA/Inventario/InventarioStart.php'); // Ajusta la ruta de redirección
     exit();
 }
 
@@ -73,7 +73,7 @@ $_SESSION['tipo_mensaje'] = $tipo_mensaje;
 
 // Redirigir siempre de vuelta a la página de inventario
 // ¡ASEGÚRATE DE QUE LA RUTA SEA CORRECTA!
-header('Location: ../../VISTA/InventarioStart.php');
+header('Location: ../../VISTA/Inventario/InventarioStart.php');
 exit();
 
 ?>

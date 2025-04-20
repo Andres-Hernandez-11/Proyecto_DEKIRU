@@ -20,6 +20,6 @@ session_destroy();
 
 // 4. Redirigir al usuario a la página de inicio de sesión
 // Asegúrate de que la ruta sea correcta según la ubicación de este archivo.
-header("Location: ../VISTA/Login_UI.php");
+header("Location: ../VISTA/Login/Login_UI.php");
 exit(); // Es importante llamar a exit() después de header() para asegurar que el script se detiene.
 ?>

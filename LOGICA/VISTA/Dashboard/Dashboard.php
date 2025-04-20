@@ -11,7 +11,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Rápidos del Altiplano (CSS Separado)</title>
     
-    <link rel="stylesheet" href="..\VISTA\EstilosDashboard.css" />
+    <link rel="stylesheet" href="..\Dashboard\EstilosDashboard.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -23,7 +23,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
         <aside class="sidebar">
             <div class="sidebar-header">
                  <div class="sidebar-logo-container">
-                    <img src="..\..\IMAGENES\LogoRapidosDelAltiplano.jpg" alt="Logo Rápidos del Altiplano" class="sidebar-logo" onerror="this.onerror=null; this.src='https://placehold.co/150x50/cccccc/333333?text=Logo+Placeholder';">
+                    <img src="..\..\..\IMAGENES\LogoRapidosDelAltiplano.jpg" alt="Logo Rápidos del Altiplano" class="sidebar-logo" onerror="this.onerror=null; this.src='https://placehold.co/150x50/cccccc/333333?text=Logo+Placeholder';">
                  </div>
                 <h2 class="sidebar-title">Menú Principal</h2>
             </div>
@@ -31,13 +31,13 @@ $current_page = basename($_SERVER['PHP_SELF']);
                 <?php
                     // Definir los enlaces y sus archivos correspondientes
                     $nav_links = [
-                        'Dashboard.php' => ['icon' => '../../IMAGENES/Dashboard.png', 'text' => 'Dashboard (Inicio)', 'alt' => 'Icono Dashboard'],
-                        'Clientes.php' => ['icon' => '../../IMAGENES/Clientes.png', 'text' => 'Clientes', 'alt' => 'Icono Clientes'], // Asume Clientes.php
-                        'InventarioStart.php' => ['icon' => '../../IMAGENES/Inventario.png', 'text' => 'Inventario', 'alt' => 'Icono Inventario'],
-                        'Ventas.php' => ['icon' => '../../IMAGENES/Ventas-Compras.png', 'text' => 'Ventas-Compras', 'alt' => 'Icono Ventas'], // Asume Ventas.php
-                        'RRHH.php' => ['icon' => '../../IMAGENES/RH.png', 'text' => 'Recursos Humanos', 'alt' => 'Icono Recursos Humanos'], // Asume RRHH.php
-                        'Contabilidad.php' => ['icon' => '../../IMAGENES/Contabilidad.png', 'text' => 'Contabilidad', 'alt' => 'Icono Contabilidad'], // Asume Contabilidad.php
-                        'Configuracion.php' => ['icon' => '../../IMAGENES/Configuracion.png', 'text' => 'Configuración', 'alt' => 'Icono Configuración'] // Asume Configuracion.php
+                        'Dashboard.php' => ['icon' => '../../../IMAGENES/Dashboard.png', 'text' => 'Dashboard (Inicio)', 'alt' => 'Icono Dashboard'],
+                        'Clientes.php' => ['icon' => '../../../IMAGENES/Clientes.png', 'text' => 'Clientes', 'alt' => 'Icono Clientes'], // Asume Clientes.php
+                        '../Inventario/InventarioStart.php' => ['icon' => '../../../IMAGENES/Inventario.png', 'text' => 'Inventario', 'alt' => 'Icono Inventario'],
+                        'Ventas.php' => ['icon' => '../../../IMAGENES/Ventas-Compras.png', 'text' => 'Ventas-Compras', 'alt' => 'Icono Ventas'], // Asume Ventas.php
+                        'RRHH.php' => ['icon' => '../../../IMAGENES/RH.png', 'text' => 'Recursos Humanos', 'alt' => 'Icono Recursos Humanos'], // Asume RRHH.php
+                        'Contabilidad.php' => ['icon' => '../../../IMAGENES/Contabilidad.png', 'text' => 'Contabilidad', 'alt' => 'Icono Contabilidad'], // Asume Contabilidad.php
+                        'Configuracion.php' => ['icon' => '../../../IMAGENES/Configuracion.png', 'text' => 'Configuración', 'alt' => 'Icono Configuración'] // Asume Configuracion.php
                     ];
                 ?>
                 <?php foreach ($nav_links as $file => $link): ?>
@@ -65,7 +65,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                         <span class="user-info">
                             Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Usuario'); ?>
                         </span>
-                        <a href="../MODELO/CerrarSesion.php" class="logout-button">
+                        <a href="../../MODELO/CerrarSesion.php" class="logout-button">
                             <span class="icon"></span>
                             Cerrar Sesión
                         </a>
