@@ -32,12 +32,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     // Definir los enlaces y sus archivos correspondientes
                     $nav_links = [
                         'Dashboard.php' => ['icon' => '../../../IMAGENES/Dashboard.png', 'text' => 'Dashboard (Inicio)', 'alt' => 'Icono Dashboard'],
-                        'Clientes.php' => ['icon' => '../../../IMAGENES/Clientes.png', 'text' => 'Clientes', 'alt' => 'Icono Clientes'], // Asume Clientes.php
+                        '../Clientes/Clientes.php' => ['icon' => '../../../IMAGENES/Clientes.png', 'text' => 'Clientes', 'alt' => 'Icono Clientes'], // Asume Clientes.php
                         '../Inventario/InventarioStart.php' => ['icon' => '../../../IMAGENES/Inventario.png', 'text' => 'Inventario', 'alt' => 'Icono Inventario'],
                         '../Ventas/Ventas.php' => ['icon' => '../../../IMAGENES/Ventas-Compras.png', 'text' => 'Ventas', 'alt' => 'Icono Ventas'], // Asume Ventas.php
                         '../RRHH/RRHH_UI.php' => ['icon' => '../../../IMAGENES/RH.png', 'text' => 'Recursos Humanos', 'alt' => 'Icono Recursos Humanos'], // Asume RRHH.php
-                        'Contabilidad.php' => ['icon' => '../../../IMAGENES/Contabilidad.png', 'text' => 'Contabilidad', 'alt' => 'Icono Contabilidad'], // Asume Contabilidad.php
-                        'Configuracion.php' => ['icon' => '../../../IMAGENES/Configuracion.png', 'text' => 'Configuración', 'alt' => 'Icono Configuración'] // Asume Configuracion.php
+                        //'Contabilidad.php' => ['icon' => '../../../IMAGENES/Contabilidad.png', 'text' => 'Contabilidad', 'alt' => 'Icono Contabilidad'], // Asume Contabilidad.php
+                        //'Configuracion.php' => ['icon' => '../../../IMAGENES/Configuracion.png', 'text' => 'Configuración', 'alt' => 'Icono Configuración'] // Asume Configuracion.php
                     ];
                 ?>
                 <?php foreach ($nav_links as $file => $link): ?>
@@ -128,7 +128,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                             </div>
                              <div class="placeholder-content">
                                 </div>
-                            <a href="#" class="widget-link">Gestionar Clientes ></a>
+                            <a href="../Clientes/Clientes.php" class="widget-link">Gestionar Clientes ></a>
                         </div>
 
                         <div class="widget">

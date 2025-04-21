@@ -1,37 +1,35 @@
 <?php
 
-error_reporting(E_ALL); // Temporal: Mostrar todos los errores durante el desarrollo
-ini_set('display_errors', 1); // Temporal: Mostrar errores en pantalla
+error_reporting(E_ALL); 
+ini_set('display_errors', 1);
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// Incluir archivo de conexión
-// ¡ASEGÚRATE DE QUE LA RUTA SEA CORRECTA DESDE InventarioStart.php!
+
 require_once '../../MODELO/conexion.php';
 
-// Verificar si la conexión se estableció correctamente (la variable $conn viene de conexion.php)
 if (!$conn) {
-    // Manejar error de conexión de forma más robusta si es necesario
+    
     die("Error crítico: No se pudo establecer la conexión a la base de datos.");
 }
 
-$items_por_pagina = 10; // Número de ítems a mostrar por página
+$items_por_pagina = 10; 
 
-// --- Obtener Parámetros de la URL (GET) ---
+
 $busqueda = trim($_GET['q'] ?? '');
 $categoria_filtro = $_GET['categoria'] ?? '';
-$proveedor_filtro = $_GET['proveedor'] ?? ''; // Espera el ID del proveedor
+$proveedor_filtro = $_GET['proveedor'] ?? ''; 
 $mostrar_bajo_minimo = isset($_GET['bajo_minimo']);
-$pagina_actual = isset($_GET['pagina']) ? max(1, (int)$_GET['pagina']) : 1; // Asegura que sea >= 1
+$pagina_actual = isset($_GET['pagina']) ? max(1, (int)$_GET['pagina']) : 1; 
 
-// --- Inicializar Variables para la Vista ---
+
 $categorias_disponibles = [];
 $proveedores_disponibles = [];
 $inventario_paginado = [];
 $total_items = 0;
 $total_paginas = 0;
-$error_db = null; // Para almacenar mensajes de error de BD
+$error_db = null; 
 
-// --- Obtener Datos para los Filtros (Dropdowns) ---
+
 try {
     // Categorías
     $sql_cat = "SELECT DISTINCT categoria FROM PRODUCTO WHERE categoria IS NOT NULL AND categoria != '' ORDER BY categoria ASC";
@@ -63,12 +61,11 @@ try {
                  LEFT JOIN PROVEEDOR pr ON p.id_proveedor = pr.id_proveedor";
 
     $where_clauses = [];
-    $params = []; // Array para los parámetros a vincular
-    $types = ""; // String para los tipos de parámetros (s=string, i=integer)
+    $params = [];
+    $types = ""; 
     
 
     if (!empty($busqueda)) {
-        // Buscar en ID (como string) o nombre
         $where_clauses[] = "(CAST(p.id_producto AS CHAR) LIKE ? OR p.nombre LIKE ?)";
         $search_term = "%" . $busqueda . "%";
         $params[] = $search_term;
@@ -82,11 +79,11 @@ try {
     }
     if (!empty($proveedor_filtro)) {
         $where_clauses[] = "p.id_proveedor = ?";
-        $params[] = (int)$proveedor_filtro; // Asegurar que sea entero
+        $params[] = (int)$proveedor_filtro; 
         $types .= "i";
     }
     if ($mostrar_bajo_minimo) {
-        $where_clauses[] = "(p.stock <= p.stock_minimo AND p.stock_minimo > 0)"; // Solo si minimo > 0
+        $where_clauses[] = "(p.stock <= p.stock_minimo AND p.stock_minimo > 0)"; 
     }
 
     $sql_where = "";
@@ -94,7 +91,7 @@ try {
         $sql_where = " WHERE " . implode(" AND ", $where_clauses);
     }
 
-    // --- Paginación: Contar Total de Ítems ---
+    
     $sql_count = "SELECT COUNT(*) as total FROM PRODUCTO p" . $sql_where;
     $stmt_count = $conn->prepare($sql_count);
     if (!$stmt_count) {
@@ -102,7 +99,7 @@ try {
     }
 
     if (!empty($types)) {
-        $stmt_count->bind_param($types, ...$params); // Vincular parámetros de filtros
+        $stmt_count->bind_param($types, ...$params); 
     }
     if (!$stmt_count->execute()) {
          throw new Exception("Error al ejecutar conteo: " . $stmt_count->error);
@@ -112,14 +109,14 @@ try {
     $total_items = $result_count->fetch_assoc()['total'] ?? 0;
     $stmt_count->close();
 
-    // Calcular total de páginas y ajustar página actual
+  
     $total_paginas = ($items_por_pagina > 0) ? ceil($total_items / $items_por_pagina) : 0;
     if ($pagina_actual > $total_paginas && $total_paginas > 0) {
-        $pagina_actual = $total_paginas; // Ir a la última página si la actual no existe
+        $pagina_actual = $total_paginas; 
     }
     $offset = ($pagina_actual - 1) * $items_por_pagina;
 
-    // --- Ejecutar Consulta Principal para Obtener Ítems Paginados ---
+    
     $sql_final = $sql_base . $sql_where . " ORDER BY p.nombre ASC LIMIT ? OFFSET ?";
     $types .= "ii"; // Añadir tipos para LIMIT y OFFSET
     $params[] = $items_por_pagina;
@@ -131,7 +128,6 @@ try {
     }
 
     if (!empty($types)) {
-         // Vincular todos los parámetros (filtros + limit + offset)
         $stmt_main->bind_param($types, ...$params);
     }
      if (!$stmt_main->execute()) {
@@ -146,11 +142,7 @@ try {
     $stmt_main->close();
 
 } catch (Exception $e) {
-    // Capturar cualquier excepción de base de datos
     $error_db = "Error de Base de Datos: " . $e->getMessage();
-    // Opcional: Loggear el error en un archivo en lugar de mostrarlo directamente
-    // error_log($error_db);
-    // Podrías querer limpiar las variables de resultados si hubo un error
     $inventario_paginado = [];
     $total_items = 0;
     $total_paginas = 0;
