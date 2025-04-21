@@ -63,7 +63,7 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     </div>
                     <div class="header-right">
                         <span class="user-info">
-                            Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Usuario'); ?>
+                            Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_Invitado'] ?? 'Invitado'); ?>
                         </span>
                         <a href="../../MODELO/CerrarSesion.php" class="logout-button">
                             <span class="icon"></span>

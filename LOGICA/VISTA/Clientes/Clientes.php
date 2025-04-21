@@ -1,4 +1,7 @@
 <?php
+
+session_start();
+
 $host = 'localhost';
 $usuario = 'root';
 $contrasena = '';
@@ -52,6 +55,7 @@ try {
 }
 
 $current_page = basename($_SERVER['PHP_SELF']);
+
 ?>
 
 <!DOCTYPE html>
@@ -142,11 +146,12 @@ $current_page = basename($_SERVER['PHP_SELF']);
                     <h1 class="header-title">Clientes</h1>
                 </div>
                 <div class="header-right">
-                         <span class="user-info">
-                             Bienvenido, <?php echo isset($_SESSION['nombre_usuario']) ? htmlspecialchars($_SESSION['nombre_usuario']) : 'Invitado'; ?>
-                         </span>
-                    <a href="../../MODELO/CerrarSesion.php" class="logout-button btn ">
-                        <span class="icon"></span> Cerrar Sesión
+                        <span class="user-info">
+                            Bienvenido, <?php echo htmlspecialchars($_SESSION['nombre_usuario'] ?? 'Usuario'); ?>
+                        </span>
+                    <a href="../../MODELO/CerrarSesion.php" class="logout-button">
+                        <span class="icon"></span>
+                        Cerrar Sesión
                     </a>
                 </div>
             </div>
