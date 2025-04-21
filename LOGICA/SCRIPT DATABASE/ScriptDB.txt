@@ -123,12 +123,15 @@ CREATE TABLE USUARIO (
 CREATE TABLE VENTA (
     id_venta INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
-    id_empleado INT DEFAULT NULL,
-    fecha DATE NOT NULL, 
+    id_vendedor INT DEFAULT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
     origen VARCHAR(100) NOT NULL,
     destino VARCHAR(100) NOT NULL,
     total DECIMAL(10,2) NOT NULL,
     metodo_pago VARCHAR(50) NOT NULL,
+    id_bus INT NOT NULL,
+    asiento INT NOT NULL,
     FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente) ON DELETE CASCADE,
     FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE SET NULL
 );
@@ -156,6 +159,7 @@ CREATE TABLE DETALLE_COMPRA (
 
 
 -- RELACIONES ENTRE MÓDULOS (Originales, aunque conceptualmente dudosas)
+
 -- Se vuelven a incluir según solicitud de revertir todo excepto PRODUCTO.
 -- Se recomienda revisar estas relaciones.
 ALTER TABLE NOMINA ADD CONSTRAINT fk_nomina_transaccion FOREIGN KEY (id_nomina) REFERENCES TRANSACCION(id_transaccion) ON DELETE CASCADE;
@@ -163,3 +167,4 @@ ALTER TABLE VENTA ADD CONSTRAINT fk_venta_transaccion FOREIGN KEY (id_venta) REF
 ALTER TABLE COMPRA ADD CONSTRAINT fk_compra_transaccion FOREIGN KEY (id_compra) REFERENCES TRANSACCION(id_transaccion) ON DELETE CASCADE;
 ALTER TABLE MOVIMIENTO_INVENTARIO ADD CONSTRAINT fk_mov_inv_empleado FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE SET NULL; -- Esta FK ya estaba definida en CREATE TABLE MOVIMIENTO_INVENTARIO
 
+ALTER TABLE venta DROP FOREIGN KEY fk_venta_transaccion;
