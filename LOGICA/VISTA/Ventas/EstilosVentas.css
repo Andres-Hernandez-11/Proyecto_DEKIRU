@@ -1,0 +1,561 @@
+/* 1. Importaciones y Estilos Base                                           */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* Reset básico y Box Sizing */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f3f4f6; /* gray-100 */
+    color: #1f2937; /* gray-800 */
+    line-height: 1.5;
+}
+body.modal-open {
+    overflow: hidden; /* Evitar scroll del body cuando el modal está abierto */
+}
+
+/* Estilos base para enlaces */
+a {
+    color: #2563eb; /* blue-600 */
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* Asegurar herencia de fuentes en elementos de formulario y botones */
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0; /* El padding específico se añadirá en clases */
+    border: 1px solid #d1d5db; /* Borde por defecto */
+}
+
+button {
+    cursor: pointer;
+    background: none;
+    border: none; /* Quitar borde por defecto de botón */
+    padding: 0; /* Quitar padding por defecto de botón */
+    color: inherit; /* Heredar color de texto */
+}
+
+/* ========================================================================== */
+/* 2. Estructura Principal (Layout)                                          */
+/* ========================================================================== */
+.dashboard-container {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.main-content-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    /* Ajustar margin-left si el ancho del sidebar cambia */
+    margin-left: 250px; /* Asumiendo sidebar de 250px */
+}
+
+.main-content {
+    flex: 1;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #f3f4f6;
+    padding: 1.5rem;
+}
+
+.main-container {
+     background-color: #ffffff;
+     border-radius: 0.5rem;
+     box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+     padding: 1.5rem;
+    /* max-width: 80rem; */ /* Descomentar si quieres limitar el ancho */
+    /* margin-left: auto; */
+    /* margin-right: auto; */
+}
+
+/* ========================================================================== */
+/* 3. Componentes Principales (Sidebar, Header)                              */
+/* ========================================================================== */
+
+/* --- Barra Lateral (Sidebar) --- */
+/* Usando estilos de EstilosInventario.css original */
+.sidebar {
+    width: 16rem; /* w-64 */
+    background-color: #ffffff; /* bg-white */
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); /* shadow-md */
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+    /* Ajustar si se quiere fijo */
+     position: fixed;
+     height: 100%;
+     left: 0;
+     top: 0;
+     z-index: 50; /* Asegurar que esté sobre el contenido pero bajo modales */
+     border-right: 1px solid #e5e7eb; /* Borde derecho */
+}
+
+.sidebar-header {
+    padding: 1rem; /* p-4 */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    text-align: center;
+}
+
+.sidebar-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem; /* mb-4 */
+}
+
+.sidebar-logo {
+    height: 2.5rem; /* h-10 */
+     max-width: 80%; /* Ajustado */
+     border-radius: 0.375rem; /* Añadido */
+}
+
+.sidebar-title {
+    font-size: 1.125rem; /* text-lg */
+    font-weight: 600; /* font-semibold */
+    color: #374151; /* text-gray-700 */
+}
+
+.sidebar-nav {
+    flex: 1;
+    padding: 1rem 0.5rem; /* px-2 py-4 */
+}
+
+.sidebar-link {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 1rem; /* px-4 py-2 */
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500; /* font-medium */
+    color: #374151; /* text-gray-700 */
+    border-radius: 0.375rem; /* rounded-md */
+    margin-bottom: 0.25rem; /* space-y-1 */
+    transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+.sidebar-icon {
+    width: 1rem; /* 16px */
+    height: 1rem; /* 16px */
+    margin-right: 0.75rem; /* mr-3 */
+    vertical-align: middle;
+    flex-shrink: 0;
+    object-fit: contain;
+}
+
+.sidebar-link:hover {
+    background-color: #e5e7eb; /* hover:bg-gray-200 */
+    color: #111827; /* hover:text-gray-900 */
+    text-decoration: none;
+}
+
+.sidebar-link.active {
+    background-color: #2563eb; /* bg-blue-600 */
+    color: #ffffff; /* text-white */
+}
+
+.sidebar-link.active:hover {
+    background-color: #1d4ed8; /* hover:bg-blue-700 */
+}
+
+.sidebar::-webkit-scrollbar { width: 4px; }
+.sidebar::-webkit-scrollbar-thumb { background-color: #9ca3af; border-radius: 20px; }
+.sidebar::-webkit-scrollbar-track { background-color: #e5e7eb; }
+
+/* --- Encabezado Superior (Header) --- */
+/* Usando estilos de EstilosInventario.css original */
+.header {
+    background-color: #ffffff; /* bg-white */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+    border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+    flex-shrink: 0;
+    height: 4rem; /* h-16 */
+}
+
+.header-container {
+    max-width: 80rem; /* max-w-7xl */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem; /* px-4 */
+    padding-right: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+}
+
+.header-title {
+    font-size: 1.25rem; /* text-xl */
+    font-weight: 600; /* font-semibold */
+    color: #111827; /* text-gray-900 */
+    margin-right: 1.5rem;
+}
+
+.header-filter select {
+    border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.25rem 0.75rem; font-size: 0.875rem; outline: none; background-color: #fff; height: auto; line-height: 1.5;
+}
+.header-filter select:focus {
+    border-color: #2563eb; box-shadow: 0 0 0 1px #2563eb;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem; /* space-x-4 */
+}
+
+.user-info {
+    font-size: 0.875rem; /* text-sm */
+    color: #4b5563; /* text-gray-600 */
+}
+
+.logout-button {
+    display: flex; align-items: center; font-size: 0.875rem; color: #6b7280; background: none; border: none; cursor: pointer; padding: 0.25rem 0.5rem; border-radius: 0.375rem; transition: color 0.2s ease-in-out, background-color 0.2s ease-in-out;
+}
+.logout-button:hover {
+    color: #374151; background-color: #f3f4f6; text-decoration: none;
+}
+ .logout-button .icon {
+     margin-right: 0.25rem; /* mr-1 */
+     /* Estilos de icono SVG ya estaban en línea, si se quitan, ponerlos aquí */
+ }
+
+/* ========================================================================== */
+/* 4. Componentes Reutilizables                                              */
+/* ========================================================================== */
+
+/* --- Botones Generales (Restaurando versión original de EstilosInventario.css) --- */
+.btn {
+    padding: 0.5rem 1rem; /* Padding original */
+    border-radius: 0.375rem; /* rounded-md */
+    font-weight: 500;
+    font-size: 0.875rem; /* text-sm */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid transparent;
+    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    height: 38px; /* Altura consistente original */
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1; /* line-height original */
+    white-space: nowrap;
+}
+.btn:hover {
+    text-decoration: none;
+}
+.btn .icon {
+    margin-right: 0.5rem;
+    font-style: normal;
+}
+.btn-primary {
+    background-color: #2563eb; /* blue-600 */
+    color: #ffffff;
+    border-color: #2563eb;
+}
+.btn-primary:hover {
+    background-color: #1d4ed8; /* blue-700 */
+    border-color: #1d4ed8;
+    color: #ffffff;
+}
+/* Estilo .btn-secondary restaurado del archivo original */
+.btn-secondary {
+    background-color: #ffffff; /* bg-white */
+    color: #374151; /* text-gray-700 */
+    border-color: #d1d5db; /* border-gray-300 */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* shadow-sm */
+}
+.btn-secondary:hover {
+    background-color: #f9fafb; /* hover:bg-gray-50 */
+    border-color: #adb5bd; /* Borde hover */
+    color: #1f2937; /* hover:text-gray-800 */
+}
+.btn-danger {
+    background-color: #dc2626; /* red-600 */
+    color: #ffffff;
+    border-color: #dc2626;
+}
+.btn-danger:hover {
+    background-color: #b91c1c; /* red-700 */
+    border-color: #b91c1c;
+}
+
+
+/* --- Barra de Acciones (Filtros, Búsqueda, etc.) --- */
+/* Usando estilos de EstilosInventario.css original */
+.action-bar {
+    display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 1rem; background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); margin-bottom: 1.5rem; border: 1px solid #e5e7eb;
+}
+.action-bar .search-field {
+    flex-grow: 1; min-width: 200px; display: flex; align-items: center; border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0 0.75rem; background-color: #fff; height: 38px;
+}
+.action-bar .search-field input[type="search"] {
+    border: none; outline: none; width: 100%; margin-left: 0.5rem; padding: 0.5rem 0; background: transparent; height: auto;
+}
+.action-bar .search-field .icon { color: #6b7280; flex-shrink: 0; font-style: normal; }
+.action-bar select,
+.action-bar .checkbox-container {
+    border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.5rem 0.75rem; background-color: #ffffff; color: #374151; font-size: 0.875rem; height: 38px; display: flex; align-items: center;
+}
+.action-bar select {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem;
+}
+.action-bar .checkbox-container { padding-right: 0.5rem; border: none; background: none; height: auto; }
+.action-bar .checkbox-container input[type="checkbox"] { margin-right: 0.5rem; height: 1rem; width: 1rem; border: 1px solid #d1d5db; border-radius: 0.25rem; cursor: pointer; }
+.action-bar .checkbox-container label { cursor: pointer; color: #374151; font-weight: 500; }
+
+/* --- Tabla de Datos --- */
+/* Usando estilos de EstilosInventario.css original */
+.table-container { background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.1), 0 1px 2px rgba(0,0,0,0.06); overflow-x: auto; border: 1px solid #e5e7eb; margin-bottom: 1.5rem; }
+table { border-collapse: collapse; width: 100%; border: none; }
+th, td { border: none; border-bottom: 1px solid #e5e7eb; padding: 0.75rem 1rem; text-align: left; font-size: 0.875rem; vertical-align: middle; line-height: 1.4; }
+td:first-child, th:first-child { padding-left: 1.5rem; }
+td:last-child, th:last-child { padding-right: 1.5rem; }
+th { background-color: #f9fafb; font-weight: 600; color: #374151; white-space: nowrap; border-bottom-width: 2px; }
+tbody tr { transition: background-color 0.15s ease-in-out; }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:nth-child(odd) { background-color: #ffffff; }
+tbody tr:nth-child(even) { background-color: #f9fafb; }
+tbody tr:hover { background-color: #f0f9ff; }
+td.actions-cell { white-space: nowrap; text-align: right; padding-right: 1rem; }
+.actions-cell .action-btn { display: inline-block; padding: 0.3rem 0.5rem; margin: 0 0.15rem; color: #6b7280; border-radius: 0.25rem; transition: background-color 0.2s ease, color 0.2s ease; line-height: 1; border: none; background: none; cursor: pointer; }
+.actions-cell .action-btn:hover { background-color: #e5e7eb; color: #1f2937; text-decoration: none; }
+.actions-cell .action-btn.delete { color: #dc2626; }
+.actions-cell .action-btn.delete:hover { background-color: #fee2e2; color: #b91c1c; }
+.actions-cell .action-btn .icon { font-size: 1.1em; vertical-align: middle; display: inline-block; font-style: normal; }
+.low-stock { background-color: #fef3c7; color: #b45309; font-weight: 500; text-align: center; border-radius: 0.25rem; padding: 0.25rem 0.5rem; display: inline-flex; align-items: center; font-size: 0.8rem; line-height: 1; }
+.low-stock .icon { margin-right: 0.25rem; font-size: 0.9em; font-style: normal; }
+
+/* --- Paginación --- */
+/* Usando estilos de EstilosInventario.css original */
+.pagination { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1rem; margin-top: 1.5rem; background-color: #ffffff; border-radius: 0.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.05); border: 1px solid #e5e7eb; font-size: 0.875rem; color: #4b5563; }
+.pagination .page-info { flex-grow: 1; white-space: nowrap; margin-right: 1rem; }
+.pagination .page-nav { display: flex; align-items: center; gap: 0.25rem; }
+.pagination .page-nav button,
+.pagination .page-nav a { padding: 0.5rem 1rem; border: 1px solid #d1d5db; border-radius: 0.375rem; background-color: #ffffff; color: #374151; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease; min-width: 38px; height: 38px; line-height: 1; }
+.pagination .page-nav button:hover:not(:disabled),
+.pagination .page-nav a:hover { background-color: #f9fafb; text-decoration: none; border-color: #adb5bd; }
+.pagination .page-nav button:disabled { opacity: 0.6; cursor: not-allowed; background-color: #f9fafb; }
+.pagination .page-nav .page-number { padding: 0.5rem 0.75rem; border: 1px solid transparent; min-width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; }
+.pagination .page-nav .page-number.active { border-color: #2563eb; background-color: #eff6ff; font-weight: 600; color: #1d4ed8; z-index: 1; }
+
+/* --- Modales (Restaurando estructura original de EstilosInventario.css) --- */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 1000; padding: 1rem;
+}
+.modal-overlay.active { display: flex; }
+.modal-content {
+    background-color: #fff; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; position: relative; display: flex; flex-direction: column;
+
+}
+
+.modal-header {
+    display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb; padding-bottom: 1rem; margin-bottom: 1.5rem; flex-shrink: 0;
+}
+.modal-title { font-size: 1.25rem; font-weight: 600; color: #111827; }
+.modal-close-btn { background: none; border: none; font-size: 1.5rem; color: #6b7280; cursor: pointer; padding: 0.5rem; line-height: 1; transition: color 0.2s ease; }
+.modal-close-btn:hover { color: #111827; }
+.modal-body { line-height: 1.6; flex-grow: 1; margin-bottom: 1.5rem; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 0.75rem; border-top: 1px solid #e5e7eb; padding-top: 1rem; margin-top: auto; flex-shrink: 0; }
+
+/* --- Estilos Formularios en Modales (Restaurando estructura original) --- */
+/* Se usan IDs específicos como en EstilosInventario.css original */
+/* NOTA: Se mantienen las clases .modal-form-group y .modal-form-grid para el modal de editar que ya las usa */
+#modal-agregar-item .form-grid,
+#modal-editar-item .modal-form-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.25rem;
+}
+#modal-agregar-item .form-group,
+#modal-editar-item .modal-form-group {
+    display: flex;
+    flex-direction: column;
+}
+#modal-agregar-item .form-group.full-width,
+#modal-editar-item .modal-form-group.full-width {
+    grid-column: 1 / -1;
+}
+#modal-agregar-item label,
+#modal-editar-item label {
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    color: #374151;
+    display: block;
+}
+#modal-agregar-item input[type="text"],
+#modal-agregar-item input[type="number"],
+#modal-agregar-item select,
+#modal-agregar-item textarea,
+#modal-editar-item input[type="text"],
+#modal-editar-item input[type="number"],
+#modal-editar-item select,
+#modal-editar-item textarea {
+    border: 1px solid #d1d5db; border-radius: 0.375rem; padding: 0.6rem 0.75rem; font-size: 0.875rem; width: 100%; box-sizing: border-box; background-color: #fff; transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+#modal-agregar-item input:focus,
+#modal-agregar-item select:focus,
+#modal-agregar-item textarea:focus,
+#modal-editar-item input:focus,
+#modal-editar-item select:focus,
+#modal-editar-item textarea:focus {
+    border-color: #2563eb; box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2); outline: none;
+}
+#modal-agregar-item textarea,
+#modal-editar-item textarea {
+    min-height: 80px; resize: vertical;
+}
+#modal-agregar-item select,
+#modal-editar-item select {
+    -webkit-appearance: none; -moz-appearance: none; appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; padding-right: 2.5rem;
+}
+/* --- Mensajes de Feedback --- */
+/* Usando estilos de EstilosInventario.css original */
+.feedback-message { padding: 1rem 1.5rem; margin-bottom: 1.5rem; border-radius: 0.375rem; border: 1px solid transparent; font-size: 0.9rem; display: flex; align-items: center; gap: 0.75rem; }
+.feedback-message.success { background-color: #dcfce7; border-color: #bbf7d0; color: #166534; }
+.feedback-message.error { background-color: #fee2e2; border-color: #fecaca; color: #991b1b; }
+.feedback-message.warning { background-color: #fef3c7; border-color: #fde68a; color: #92400e; }
+.feedback-message.info { background-color: #dbeafe; border-color: #bfdbfe; color: #1e40af; }
+
+/* ========================================================================== */
+/* 5. Estilos Específicos de Módulo (Inventario)                         */
+/* ========================================================================== */
+/* Usando estilos de EstilosInventario.css original */
+.ventas-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
+.ventas-title { font-size: 1.75rem; font-weight: 700; color: #111827; }
+
+/* ========================================================================== */
+/* 6. Media Queries (Responsividad)                                          */
+/* ========================================================================== */
+/* Usando estilos de EstilosInventario.css original */
+@media (min-width: 640px) { /* sm */
+    .header-container { padding-left: 1.5rem; padding-right: 1.5rem; }
+}
+@media (min-width: 1024px) { /* lg */
+    .header-container { padding-left: 2rem; padding-right: 2rem; }
+}
+
+/* ========================================================================== */
+/* 7. Estilos Específicos de Modales (Ver/Eliminar - Añadidos)               */
+/* ========================================================================== */
+
+/* --- Estilos Contenido Modal "Ver Detalle" --- */
+#modal-ver-item .modal-content { max-width: 600px; padding: 1.5rem 2rem 2rem 2rem; }
+#modal-ver-item .modal-body { padding-bottom: 1rem; }
+/* Estilos para la lista dl/dt/dd dentro de #modal-ver-item */
+#modal-ver-item dl.detail-list { display: grid; grid-template-columns: 130px 1fr; gap: 1rem 1.25rem; margin: 0; padding: 0; align-items: start; }
+#modal-ver-item dl.detail-list dt { grid-column: 1; font-weight: 500; color: #4b5563; text-align: left; font-size: 0.875rem; line-height: 1.5; margin: 0; padding: 0; }
+#modal-ver-item dl.detail-list dd { grid-column: 2; margin: 0; padding: 0 0 1rem 0; border: none; color: #1f2937; font-size: 0.875rem; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
+/* Estilos para textos de carga y error dentro de #modal-ver-item */
+#modal-ver-item .loading-text, #modal-ver-item .error-text { text-align: center; padding: 3rem 1rem; color: #6b7280; font-size: 1rem; }
+#modal-ver-item .error-text { color: #b91c1c; font-weight: 500; background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 0.375rem; margin: 1rem 0; padding: 1.5rem; }
+#modal-ver-item .error-text strong { display: block; margin-bottom: 0.5rem; color: #991b1b; font-weight: 600; }
+
+/* --- Estilos Contenido Modal "Eliminar" --- */
+#modal-eliminar-item .confirm-text { margin-bottom: 1.5rem; text-align: center; font-size: 1rem; color: #374151; line-height: 1.6; }
+#modal-eliminar-item .item-name { font-weight: 600; color: #1f2937; }
+#modal-eliminar-item .warning-text { color: #dc2626; font-weight: 600; }
+#modal-eliminar-item .error-message { color: #b91c1c; margin-top: 1rem; font-size: 0.875rem; text-align: center; background-color: #fee2e2; border: 1px solid #fecaca; border-radius: 0.375rem; padding: 1rem; display: none; /* Oculto por defecto */ }
+
+/* Placeholder genérico para iconos */
+.icon { font-style: normal; display: inline-block; }
+
+
+/* Estilos para el modal de agregar viaje */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% down from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+    animation-name: animatetop;
+    animation-duration: 0.4s
+}
+
+/* Add Animation */
+@keyframes animatetop {
+    from {top: -300px; opacity: 0}
+    to {top: 15%; opacity: 1}
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Estilos para los elementos dentro del formulario (opcional, ajusta según necesites) */
+#formulario-agregar-viaje label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+#formulario-agregar-viaje input[type=text],
+#formulario-agregar-viaje input[type=date],
+#formulario-agregar-viaje input[type=time],
+#formulario-agregar-viaje input[type=number],
+#formulario-agregar-viaje select {
+    width: calc(100% - 12px);
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+#formulario-agregar-viaje .btn-primary {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1em;
+}
+#formulario-agregar-viaje .btn-primary:hover {
+    background-color: #0056b3;
+}
