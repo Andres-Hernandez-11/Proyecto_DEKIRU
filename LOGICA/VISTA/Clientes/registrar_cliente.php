@@ -3,56 +3,123 @@ session_start();
 
 $current_page = basename($_SERVER['PHP_SELF']);
 
-// **TODO:** Conexión a la base de datos
-// ... (Código de conexión a la base de datos)
+$servername = "localhost";
+$username = "root";
+$password = "";
+$database = "dekirudb";
 
-// Variables para mensajes de error/éxito
+$conn = new mysqli($servername, $username, $password, $database);
+
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
+}
+
 $errores = [];
 $mensaje_exito = '';
 
-// Procesamiento del formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    //  Validación (¡IMPORTANTE!  Sanitiza y valida los datos antes de guardarlos en la base de datos)
+    // Validación
     if (empty($_POST["nombre"])) {
         $errores[] = "El nombre es obligatorio.";
     }
-    if (empty($_POST["tipo_cliente"])) {
-        $errores[] = "El tipo de cliente es obligatorio.";
+    if (empty($_POST["apellido"])) {
+        $errores[] = "El apellido es obligatorio.";
     }
-    //  Validar el correo electrónico si es necesario (puedes usar filter_var)
+    if (empty($_POST["documento"])) {
+        $errores[] = "El documento es obligatorio.";
+    }
 
-    // Si no hay errores, guardar en la base de datos
+    // Si no hay errores, guardar
     if (empty($errores)) {
-        $nombre = mysqli_real_escape_string($conn, $_POST["nombre"]);  //  Sanitizar
-        $tipo_cliente = mysqli_real_escape_string($conn, $_POST["tipo_cliente"]);
-        $contacto = mysqli_real_escape_string($conn, $_POST["contacto"]);
+        $nombre = mysqli_real_escape_string($conn, $_POST["nombre"]);
+        $apellido = mysqli_real_escape_string($conn, $_POST["apellido"]);
+        $documento = mysqli_real_escape_string($conn, $_POST["documento"]);
+        $telefono = mysqli_real_escape_string($conn, $_POST["telefono"]);
         $email = mysqli_real_escape_string($conn, $_POST["email"]);
 
-        $sql = "INSERT INTO clientes (nombre, tipo_cliente, contacto, email) VALUES ('$nombre', '$tipo_cliente', '$contacto', '$email')";  //  ¡CUIDADO!  Usar sentencias preparadas es más seguro
+        $sql = "INSERT INTO cliente (nombre, apellido, documento, telefono, email)
+                VALUES ('$nombre', '$apellido', '$documento', '$telefono', '$email')";
 
         if ($conn->query($sql) === TRUE) {
             $mensaje_exito = "Cliente registrado con éxito.";
         } else {
-            $errores[] = "Error al registrar el cliente: " . $conn->error;
+            $errores[] = "Error al registrar cliente: " . $conn->error;
         }
     }
 }
-
-// ... (El resto del código HTML)
-
 ?>
+<?php if ($mensaje_exito): ?>
+    <div id="popup-exito" class="popup-overlay">
+        <div class="popup-content">
+            <h2>¡Cliente registrado!</h2>
+            <p><?php echo htmlspecialchars($mensaje_exito); ?></p>
+            <button onclick="cerrarPopup()">Cerrar</button>
+        </div>
+    </div>
+    <script>
+        function cerrarPopup() {
+            const popup = document.getElementById("popup-exito");
+            popup.style.display = "none";
+        }
+        // Mostrar el popup automáticamente al cargar la página si $mensaje_exito tiene valor
+        window.onload = function() {
+            const popup = document.getElementById("popup-exito");
+            if (popup) {
+                popup.style.display = "flex";
+            }
+        };
+    </script>
+<?php endif; ?>
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cliente - Rápidos del Altiplano</title>
     <link rel="stylesheet" href="../Inventario/EstilosInventario.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-</head>
+    <style>
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none; /* Ocultar por defecto */
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+        }
 
+        .popup-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .popup-content button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .popup-content button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
 <body>
 <div class="dashboard-container">
     <aside class="sidebar">
@@ -66,7 +133,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
         <nav class="sidebar-nav">
             <?php
-            // Rutas ajustadas
             $nav_links = [
                 '../Dashboard/Dashboard.php' => ['icon' => '../../../IMAGENES/Dashboard.png', 'text' => 'Dashboard (Inicio)', 'alt' => 'Icono Dashboard'],
                 'Clientes.php' => ['icon' => '../../../IMAGENES/Clientes.png', 'text' => 'Clientes', 'alt' => 'Icono Clientes'],
@@ -99,7 +165,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         <span class="user-info">
                             Bienvenido, <?php echo isset($_SESSION['nombre_usuario']) ? htmlspecialchars($_SESSION['nombre_usuario']) : 'Invitado'; ?>
                         </span>
-                    <a href="../../MODELO/CerrarSesion.php" class="logout-button btn ">
+                    <a href="../../MODELO/CerrarSesion.php" class="logout-button btn">
                         <span class="icon"></span> Cerrar Sesión
                     </a>
                 </div>
@@ -121,15 +187,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     </div>
 
                     <div class="form-group">
-                        <label for="tipo_cliente">Tipo de Cliente:</label>
-                        <select id="tipo_cliente" name="tipo_cliente" required>
-                            <option value="Tipo">Tipo</option>
-                        </select>
+                        <label for="apellido">Apellido:</label>
+                        <input type="text" id="apellido" name="apellido" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="contacto">Contacto:</label>
-                        <input type="text" id="contacto" name="contacto">
+                        <label for="documento">Documento:</label>
+                        <input type="text" id="documento" name="documento" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="telefono">Teléfono:</label>
+                        <input type="text" id="telefono" name="telefono">
                     </div>
 
                     <div class="form-group">
@@ -161,11 +230,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </main>
     </div>
 </div>
-
 <script>
-    //  Aquí va el JavaScript para la lógica de la página (validación, etc.)
+    function cerrarPopup() {
+        const popup = document.getElementById("popup-exito");
+        popup.style.display = "none";
+    }
 </script>
-
 </body>
-
 </html>
