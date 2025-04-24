@@ -1,21 +1,17 @@
 <?php
 session_start();
-
 require_once '../conexion.php';
-
 // --- Inicialización de Variables ---
 $mensaje = 'Acción no válida.';
 $tipo_mensaje = 'error';
 $conn_closed = false;
-
 // --- Verificar Conexión ---
 if (empty($conn) || !($conn instanceof mysqli)) {
     $_SESSION['mensaje'] = "Error crítico: No se pudo conectar a la base de datos.";
     $_SESSION['tipo_mensaje'] = "error";
-    header('Location: ../../VISTA/Ventas/Ventas.php'); // Ajusta la ruta si es necesario
+    header('Location: ../../VISTA/Ventas/Ventas.php');
     exit();
 }
-
 // --- Procesar Solicitud POST ---
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // 1. Recuperar datos del formulario
@@ -25,16 +21,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $fecha = trim($_POST['fecha'] ?? '');
     $origen = trim($_POST['origen'] ?? '');
     $destino = trim($_POST['destino'] ?? '');
-
     // Total debe ser validado como número
     $total_str = str_replace(',', '.', trim($_POST['total'] ?? ''));
     $total = filter_var($total_str, FILTER_VALIDATE_FLOAT);
-
     $metodo_pago = trim($_POST['metodo_pago'] ?? '');
     $asiento = trim($_POST['asiento'] ?? '');
     $hora = trim($_POST['hora'] ?? '');
     $id_bus = trim($_POST['id_bus'] ?? '');
-
     // 2. Validación básica (¡Similar a tu código!)
     if (empty($id_venta)) {
         $mensaje = "El ID de Venta es obligatorio.";
@@ -62,14 +55,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         // 3. Preparar la consulta INSERT
         $sql = "INSERT INTO VENTA (id_venta, id_cliente, id_vendedor, fecha, hora, origen, destino, total, metodo_pago, id_bus, asiento) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
         $stmt = $conn->prepare($sql);
-
         if ($stmt === false) {
             $mensaje = "Error al preparar la consulta INSERT: " . htmlspecialchars($conn->error);
         } else {
             // Vincular parámetros para INSERT
-            $types = "iiissssdsss"; // Ajustado para coincidir con el orden de las columnas en la tabla VENTAS
+            $types = "iiissssdsss";
             $stmt->bind_param(
                 $types,
                 $id_venta,
@@ -84,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $id_bus,
                 $asiento
             );
-
             // 4. Ejecutar la consulta
             if ($stmt->execute()) {
                 if ($stmt->affected_rows > 0) {
@@ -101,16 +91,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 // --- Guardar Mensaje y Cerrar Conexión ---
 $_SESSION['mensaje'] = $mensaje;
 $_SESSION['tipo_mensaje'] = $tipo_mensaje;
-
 if ($conn) {
     $conn->close();
 }
-
 // --- Redirigir ---
-header('Location: ../../VISTA/Ventas/Ventas.php'); // Ajusta la ruta si es necesario
+header('Location: ../../VISTA/Ventas/Ventas.php');
 exit();
 ?>
