@@ -106,8 +106,8 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
                     <h1 class="ventas-title">
                         Total: $
                         <span class="total-ventas">
-                 <?php echo number_format($total_ventas, 2); ?>
-             </span>
+                        <?php echo number_format($total_ventas, 2); ?>
+                    </span>
                     </h1>
                     <button type="button" id="btn-abrir-modal-agregar" class="btn btn-primary">
                         <span class="icon">+</span> Nueva venta
@@ -120,27 +120,52 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
                         <h2>Tiquete</h2>
                         <form id="formulario-agregar-viaje" action="../../MODELO/Ventas/agregar.php" method="POST">
 
-
-                            <label for="id_venta">ID Venta:</label>
-                            <input type="text" id="id_venta" name="id_venta" required><br>
-
                             <label for="id_cliente">ID Cliente:</label>
-                            <input type="text" id="id_cliente" name="id_cliente" required><br>
+                            <input type="number" id="id_cliente" name="id_cliente" required
+                                   oninput="javascript: if (this.value.length > 10) this.value = this.value.slice(0, 10);"
+                                   max="9999999999"
+                            <label for="id_vendedor"><b>ID Vendedor:</b></label>
+                            <input type="number" id="id_vendedor" name="id_vendedor" required
+                                   oninput="javascript: if (this.value.length > 10) this.value = this.value.slice(0, 10);"
+                                   max="9999999999"
 
-                            <label for="id_vendedor">ID Vendedor:</label>
-                            <input type="text" id="id_vendedor" name="id_vendedor" required><br>
-
-                            <label for="fecha">Fecha:</label>
+                            <label for="fecha"><b>Fecha:</b></label>
                             <input type="date" id="fecha" name="fecha" required><br>
 
                             <label for="origen">Origen:</label>
-                            <input type="text" id="origen" name="origen" required><br>
+                            <select id="origen" name="origen" required>
+                                <option value="">Seleccionar Origen</option>
+                                <option value="Bogotá">Bogotá</option>
+                                <option value="Tunja">Tunja</option>
+                                <option value="Paipa">Paipa</option>
+                                <option value="Duitama">Duitama</option>
+                                <option value="Sogamoso">Sogamoso</option>
+                                <option value="Chiquinquirá">Chiquinquirá</option>
+                                <option value="Zipaquirá">Zipaquirá</option>
+                                <option value="Ubaté">Ubaté</option>
+                                <option value="Tasco">Tasco</option>
+                                <option value="Villapinzón">Villapinzón</option>
+                            </select><br>
 
                             <label for="destino">Destino:</label>
-                            <input type="text" id="destino" name="destino" required><br>
+                            <select id="destino" name="destino" required>
+                                <option value="">Seleccionar Destino</option>
+                                <option value="Bogotá">Bogotá</option>
+                                <option value="Tunja">Tunja</option>
+                                <option value="Paipa">Paipa</option>
+                                <option value="Duitama">Duitama</option>
+                                <option value="Sogamoso">Sogamoso</option>
+                                <option value="Chiquinquirá">Chiquinquirá</option>
+                                <option value="Zipaquirá">Zipaquirá</option>
+                                <option value="Ubaté">Ubaté</option>
+                                <option value="Tasco">Tasco</option>
+                                <option value="Villapinzón">Villapinzón</option>
+                            </select><br>
 
                             <label for="total">Total:</label>
-                            <input type="number" id="total" name="total" step="0.01" required><br>
+                            <input type="number" id="total" name="total" step="0.01" required
+                                    min="0" max="999999.99"
+                                    oninput="validarTotal(this)">
 
                             <label for="metodo_pago">Método de Pago:</label>
                             <select id="metodo_pago" name="metodo_pago">
@@ -149,13 +174,21 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
                             </select><br>
 
                             <label for="asiento">Asiento:</label>
-                            <input type="text" id="asiento" name="asiento" required><br>
-
+                            <select id="asiento" name="asiento" required>
+                                <option value="">Seleccionar Asiento</option>
+                                <?php
+                                for ($i = 1; $i <= 50; $i++) {
+                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                }
+                                ?>
+                            </select><br>
                             <label for="hora">Hora:</label>
                             <input type="time" id="hora" name="hora" required><br>
 
                             <label for="id_bus">ID Bus:</label>
-                            <input type="text" id="id_bus" name="id_bus" required><br>
+                            <input type="number" id="id_bus" name="id_bus" required
+                                   oninput="javascript: if (this.value.length > 4) this.value = this.value.slice(0, 4);"
+                                   max="9999"
 
                             <div class="modal-footer">
                                 <button type="button" id="btn-cancelar-venta" class="btn btn-secondary">Cancelar</button>
@@ -172,22 +205,52 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
                             <input type="hidden" id="edit_id_venta" name="id_venta">
 
                             <label for="edit_id_cliente">ID Cliente:</label>
-                            <input type="text" id="edit_id_cliente" name="id_cliente" required><br>
+                            <input type="number" id="edit_id_cliente" name="id_cliente" required
+                                   oninput="javascript: if (this.value.length > 10) this.value = this.value.slice(0, 10);"
+                                   max="9999999999"><br>
 
                             <label for="edit_id_vendedor">ID Vendedor:</label>
-                            <input type="text" id="edit_id_vendedor" name="id_vendedor" required><br>
+                            <input type="number" id="edit_id_vendedor" name="id_vendedor" required
+                                   oninput="javascript: if (this.value.length > 10) this.value = this.value.slice(0, 10);"
+                                   max="9999999999"><br>
 
                             <label for="edit_fecha">Fecha:</label>
                             <input type="date" id="edit_fecha" name="fecha" required><br>
 
                             <label for="edit_origen">Origen:</label>
-                            <input type="text" id="edit_origen" name="origen" required><br>
+                            <select id="edit_origen" name="origen" required>
+                                <option value="">Seleccionar Origen</option>
+                                <option value="Bogotá">Bogotá</option>
+                                <option value="Tunja">Tunja</option>
+                                <option value="Paipa">Paipa</option>
+                                <option value="Duitama">Duitama</option>
+                                <option value="Sogamoso">Sogamoso</option>
+                                <option value="Chiquinquirá">Chiquinquirá</option>
+                                <option value="Zipaquirá">Zipaquirá</option>
+                                <option value="Ubaté">Ubaté</option>
+                                <option value="Tasco">Tasco</option>
+                                <option value="Villapinzón">Villapinzón</option>
+                            </select><br>
 
                             <label for="edit_destino">Destino:</label>
-                            <input type="text" id="edit_destino" name="destino" required><br>
+                            <select id="edit_destino" name="destino" required>
+                                <option value="">Seleccionar Destino</option>
+                                <option value="Bogotá">Bogotá</option>
+                                <option value="Tunja">Tunja</option>
+                                <option value="Paipa">Paipa</option>
+                                <option value="Duitama">Duitama</option>
+                                <option value="Sogamoso">Sogamoso</option>
+                                <option value="Chiquinquirá">Chiquinquirá</option>
+                                <option value="Zipaquirá">Zipaquirá</option>
+                                <option value="Ubaté">Ubaté</option>
+                                <option value="Tasco">Tasco</option>
+                                <option value="Villapinzón">Villapinzón</option>
+                            </select><br>
 
                             <label for="edit_total">Total:</label>
-                            <input type="number" id="edit_total" name="total" step="0.01" required><br>
+                            <input type="number" id="edit_total" name="total" step="0.01" required
+                                   min="0" max="999999.99"
+                                   oninput="validarTotal(this)"><br>
 
                             <label for="edit_metodo_pago">Método de Pago:</label>
                             <select id="edit_metodo_pago" name="metodo_pago">
@@ -196,13 +259,22 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
                             </select><br>
 
                             <label for="edit_asiento">Asiento:</label>
-                            <input type="text" id="edit_asiento" name="asiento" required><br>
+                            <select id="edit_asiento" name="asiento" required>
+                                <option value="">Seleccionar Asiento</option>
+                                <?php
+                                for ($i = 1; $i <= 50; $i++) {
+                                    echo "<option value='" . $i . "'>" . $i . "</option>";
+                                }
+                                ?>
+                            </select><br>
 
                             <label for="edit_hora">Hora:</label>
                             <input type="time" id="edit_hora" name="hora" required><br>
 
                             <label for="edit_id_bus">ID Bus:</label>
-                            <input type="text" id="edit_id_bus" name="id_bus" required><br>
+                            <input type="number" id="edit_id_bus" name="id_bus" required
+                                   oninput="javascript: if (this.value.length > 4) this.value = this.value.slice(0, 4);"
+                                   max="9999"><br>
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary btn-cancelar-editar">Cancelar</button>
@@ -335,8 +407,6 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
         </main>
     </div>
 
-
-
     <div id="modal-eliminar-venta" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
@@ -348,7 +418,6 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
             </div>
         </div>
     </div>
-
 
     <script>
         // Modales
@@ -440,17 +509,14 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
         spanCerrarEditar.onclick = function() {
             modalEditar.style.display = 'none';
         }
-
         btnCancelarEditar.onclick = function() {
             modalEditar.style.display = 'none';
         }
-
         window.onclick = function(event) {
             if (event.target == modalEditar) {
                 modalEditar.style.display = 'none';
             }
         }
-
         window.onload = function() {
             const feedbackMessage = document.querySelector('.feedback-message');
             if (feedbackMessage) {
@@ -526,11 +592,9 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
         btnCancelarEliminar.onclick = function() {
             modalEliminar.style.display = 'none';
         }
-
         spanCerrarEliminar.onclick = function() {
             modalEliminar.style.display = 'none';
         }
-
 
         const filterInput = document.getElementById('id_cliente_filter');
         const origenFilter = document.getElementById('origen_filter');
@@ -572,6 +636,19 @@ require_once '../../MODELO/conexion.php'; // Asegúrate de que la ruta sea corre
         filterInput.addEventListener('input', applyFilters);
         origenFilter.addEventListener('change', applyFilters);
         destinoFilter.addEventListener('change', applyFilters);
+
+        function validarTotal(input) {
+            let valor = input.value;
+            let puntoDecimal = valor.indexOf('.');
+            let parteEntera = puntoDecimal === -1 ? valor : valor.substring(0, puntoDecimal);
+
+            if (parteEntera.length > 6) {
+                input.value = parteEntera.substring(0, 6) + (puntoDecimal === -1 ? '' : valor.substring(puntoDecimal));
+                document.getElementById('total-error').style.display = 'inline';
+            } else {
+                document.getElementById('total-error').style.display = 'none';
+            }
+        }
 
     </script>
 </body>
