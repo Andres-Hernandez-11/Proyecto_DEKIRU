@@ -1,11 +1,8 @@
-USE DekiruDb;
-DROP DATABASE DekiruDb;
-
--- CREACIÓN DE BASE DE DATOS
+-- Asegúrate de que la base de datos exista o créala y úsala
 CREATE DATABASE IF NOT EXISTS DekiruDb;
 USE DekiruDb;
 
--- 1. RECURSOS HUMANOS 
+-- 1. RECURSOS HUMANOS
 CREATE TABLE EMPLEADO (
     id_empleado INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
@@ -13,31 +10,32 @@ CREATE TABLE EMPLEADO (
     cargo VARCHAR(100),
     salario DECIMAL(10,2),
     fecha_contratacion DATE,
-    estado VARCHAR(20)
+    estado VARCHAR(20) -- Ej: 'Activo', 'Inactivo'
 );
 
 CREATE TABLE NOMINA (
     id_nomina INT AUTO_INCREMENT PRIMARY KEY,
     id_empleado INT NOT NULL,
-    salario_base DECIMAL(10,2),
-    fecha_pago DATE, 
+    salario_base DECIMAL(10,2), -- O podría ser salario_neto_pagado
+    fecha_pago DATE,
+    -- Podrían añadirse campos para deducciones, bonificaciones si se detallan
     FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE CASCADE
 );
 
--- 2. CLIENTES (Definiciones originales)
+-- 2. CLIENTES
 CREATE TABLE CLIENTE (
     id_cliente INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100), 
+    nombre VARCHAR(100),
     apellido VARCHAR(100),
     documento VARCHAR(20) UNIQUE,
     telefono VARCHAR(20),
-    email VARCHAR(100) 
+    email VARCHAR(100)
 );
 
 CREATE TABLE HISTORIAL_VIAJES (
     id_historial INT AUTO_INCREMENT PRIMARY KEY,
     id_cliente INT NOT NULL,
-    fecha_viaje DATE, 
+    fecha_viaje DATE,
     origen VARCHAR(100),
     destino VARCHAR(100),
     costo DECIMAL(10,2),
@@ -46,129 +44,141 @@ CREATE TABLE HISTORIAL_VIAJES (
 
 -- 3. INVENTARIOS
 
--- Tabla PROVEEDOR (Definición original, necesaria para FK de PRODUCTO)
+-- Tabla PROVEEDOR (Necesaria para FK en PRODUCTO y COMPRA)
 CREATE TABLE PROVEEDOR (
     id_proveedor INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100),
     contacto VARCHAR(100),
     telefono VARCHAR(20),
-    email VARCHAR(100) 
+    email VARCHAR(100)
 );
 
-
+-- Tabla PRODUCTO (Mantiene campos añadidos para mejor gestión)
 CREATE TABLE PRODUCTO (
     id_producto INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,         -- Nombre del producto (dejamos NOT NULL por consistencia)
-    categoria VARCHAR(50),              -- Categoría
-    descripcion TEXT,                   -- Descripción detallada
-    stock INT DEFAULT 0,                -- Stock actual
-    precio_unitario DECIMAL(10,2) DEFAULT 0.00, -- Precio de venta unitario
-    -- === Columnas Añadidas (Estas se mantienen) ===
+    nombre VARCHAR(100) NOT NULL,
+    categoria VARCHAR(50),
+    descripcion TEXT,
+    stock INT DEFAULT 0,
+    precio_unitario DECIMAL(10,2) DEFAULT 0.00, -- Puede ser precio de costo o venta, clarificar uso
     stock_minimo INT DEFAULT 0,
-    unidad_medida VARCHAR(50),
-    ubicacion VARCHAR(100),
-    id_proveedor INT DEFAULT NULL,
+    unidad_medida VARCHAR(50), -- Ej: 'Unidad', 'Litro', 'Galón', 'Kg'
+    ubicacion VARCHAR(100), -- Ej: 'Bodega Principal', 'Estante A-3'
+    id_proveedor INT DEFAULT NULL, -- Proveedor principal o último proveedor
 
-    -- Definición de la clave foránea para proveedor (Se mantiene)
     FOREIGN KEY (id_proveedor) REFERENCES PROVEEDOR(id_proveedor)
         ON DELETE SET NULL
         ON UPDATE CASCADE
 );
 
--- Tabla MOVIMIENTO_INVENTARIO (Definición original)
+-- Tabla MOVIMIENTO_INVENTARIO (Para rastrear entradas/salidas)
 CREATE TABLE MOVIMIENTO_INVENTARIO (
     id_movimiento INT AUTO_INCREMENT PRIMARY KEY,
     id_producto INT NOT NULL,
-    tipo_movimiento ENUM('entrada', 'salida') NOT NULL, 
+    tipo_movimiento ENUM('entrada', 'salida') NOT NULL, -- 'entrada' por compra/ajuste, 'salida' por venta/uso/ajuste
     cantidad INT NOT NULL,
-    fecha DATE NOT NULL, 
-    id_empleado INT DEFAULT NULL,
-    observaciones TEXT,
-    FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto) ON DELETE CASCADE,
+    fecha DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP, -- Usar DATETIME para más precisión
+    id_empleado INT DEFAULT NULL, -- Quién realizó el movimiento
+    observaciones TEXT, -- Ej: 'Compra Fact#123', 'Ajuste por inventario físico', 'Uso en Mantenimiento Bus#5'
+    id_detalle_compra_origen INT DEFAULT NULL, -- Enlace opcional al detalle de compra que generó la entrada
+
+    FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto) ON DELETE CASCADE, -- Si se borra producto, se borran movimientos
     FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE SET NULL
+    -- FK a DETALLE_COMPRA no es estrictamente necesaria aquí si se maneja en la lógica
 );
 
 
--- 4. CONTABILIDAD (Definiciones originales)
-CREATE TABLE CUENTA_CONTABLE (
-    id_cuenta INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100), 
-    tipo VARCHAR(50),
-    saldo_actual DECIMAL(15,2) 
+-- 4. FINANZAS (Nuevo enfoque basado en Movimientos Financieros)
+-- Se eliminan CUENTA_CONTABLE y TRANSACCION
+
+CREATE TABLE MOVIMIENTO_FINANCIERO (
+    id_movimiento_fin INT AUTO_INCREMENT PRIMARY KEY,
+    fecha DATE NOT NULL,
+    hora TIME NULL, -- Hora del movimiento (opcional)
+    tipo ENUM('Ingreso', 'Egreso') NOT NULL,
+    categoria VARCHAR(100) NOT NULL, -- Ej: 'Venta Tiquetes', 'Pago Nómina', 'Compra Repuestos', 'Otros Ingresos', 'Gastos Oficina', 'Servicios Públicos'
+    descripcion TEXT,
+    monto DECIMAL(15, 2) NOT NULL, -- Siempre positivo, el 'tipo' indica si suma o resta al flujo
+
+    -- Campos para enlace automático desde otros módulos
+    id_venta_origen INT DEFAULT NULL, -- FK conceptual a VENTA.id_venta
+    id_compra_origen INT DEFAULT NULL, -- FK conceptual a PRODUCTO.id_producto
+    id_empleado_origen INT DEFAULT NULL, -- FK conceptual a EMPLEADO.id_empleado
+
+    -- Opcional: Referencia a quién registró (útil para movimientos manuales)
+    -- id_usuario_registro INT DEFAULT NULL,
+    -- FOREIGN KEY (id_usuario_registro) REFERENCES USUARIO(id_usuario) ON DELETE SET NULL,
+
+    -- Índices para optimizar consultas
+    INDEX idx_fecha_tipo (fecha, tipo),
+    INDEX idx_categoria (categoria),
+    INDEX idx_venta_origen (id_venta_origen),
+    INDEX idx_compra_origen (id_compra_origen),
+    INDEX idx_nomina_origen (id_empleado_origen)
 );
 
-CREATE TABLE TRANSACCION (
-    id_transaccion INT AUTO_INCREMENT PRIMARY KEY,
-    id_cuenta INT NOT NULL,
-    tipo_transaccion VARCHAR(50),
-    monto DECIMAL(15,2),
-    fecha DATE, 
-    descripcion TEXT, 
-    FOREIGN KEY (id_cuenta) REFERENCES CUENTA_CONTABLE(id_cuenta) ON DELETE CASCADE
-);
 
-
-
--- 5. Usuario inicio de sesion (Definición original)
+-- 5. Usuario inicio de sesión
 CREATE TABLE USUARIO (
     id_usuario INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
     correo VARCHAR(100) UNIQUE NOT NULL,
-    usuario VARCHAR(50) UNIQUE NOT NULL, 
-    contrasena VARCHAR(255) NOT NULL
+    usuario VARCHAR(50) UNIQUE NOT NULL,
+    contrasena VARCHAR(255) NOT NULL -- Almacenar hash de contraseña
 );
 
 
--- 6. VENTAS/COMPRAS (Definiciones originales)
+-- 6. VENTAS/COMPRAS
 
--- Tabla VENTA (Original)
+-- Tabla VENTA (Se mantiene estructura original del usuario)
 CREATE TABLE VENTA (
-    id_venta INT AUTO_INCREMENT PRIMARY KEY,
+    id_venta INT NOT NULL AUTO_INCREMENT PRIMARY KEY, -- Ajustado según script usuario
     id_cliente INT NOT NULL,
-    id_vendedor INT DEFAULT NULL,
+    id_vendedor INT DEFAULT NULL, -- Asumiendo que es un id_empleado
     fecha DATE NOT NULL,
     hora TIME NOT NULL,
     origen VARCHAR(100) NOT NULL,
     destino VARCHAR(100) NOT NULL,
     total DECIMAL(10,2) NOT NULL,
     metodo_pago VARCHAR(50) NOT NULL,
-    id_bus INT NOT NULL,
-    asiento INT NOT NULL
-);
+    id_bus INT DEFAULT NULL, -- Se permite NULL si no es relevante siempre
+    asiento VARCHAR(10) DEFAULT NULL, -- Se permite NULL y VARCHAR por si es ej: '10A'
 
--- Tabla COMPRA (Original)
+    FOREIGN KEY (id_cliente) REFERENCES CLIENTE(id_cliente) ON DELETE RESTRICT, -- Evitar borrar clientes con ventas
+    FOREIGN KEY (id_vendedor) REFERENCES EMPLEADO(id_empleado) ON DELETE SET NULL
+    -- FK a id_bus necesitaría una tabla BUS
+);
+-- Ajuste Auto_Increment para VENTA según script del usuario
+ALTER TABLE VENTA AUTO_INCREMENT = 100;
+
+-- Tabla COMPRA (Se mantiene estructura original)
 CREATE TABLE COMPRA (
     id_compra INT AUTO_INCREMENT PRIMARY KEY,
     id_proveedor INT NOT NULL,
-    fecha DATE NOT NULL, 
+    fecha DATE NOT NULL,
     total DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id_proveedor) REFERENCES PROVEEDOR(id_proveedor) ON DELETE CASCADE
+    -- Se podría añadir un estado: 'Pendiente', 'Recibida', 'Pagada'
+    FOREIGN KEY (id_proveedor) REFERENCES PROVEEDOR(id_proveedor) ON DELETE RESTRICT -- Evitar borrar proveedores con compras
 );
 
--- Tabla DETALLE_COMPRA (Original)
+-- Tabla DETALLE_COMPRA (Se mantiene estructura original)
 CREATE TABLE DETALLE_COMPRA (
     id_detalle INT AUTO_INCREMENT PRIMARY KEY,
     id_compra INT NOT NULL,
     id_producto INT NOT NULL,
     cantidad INT NOT NULL,
-    precio_unitario DECIMAL(10,2) NOT NULL,
-    subtotal DECIMAL(10,2) NOT NULL,
-    FOREIGN KEY (id_compra) REFERENCES COMPRA(id_compra) ON DELETE CASCADE,
-    FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto) ON DELETE CASCADE
+    precio_unitario DECIMAL(10,2) NOT NULL, -- Precio de costo
+    subtotal DECIMAL(10,2) NOT NULL, -- Calculado: cantidad * precio_unitario
+
+    FOREIGN KEY (id_compra) REFERENCES COMPRA(id_compra) ON DELETE CASCADE, -- Si se borra compra, se borran detalles
+    FOREIGN KEY (id_producto) REFERENCES PRODUCTO(id_producto) ON DELETE RESTRICT -- Evitar borrar productos si están en compras
 );
 
+-- NOTA FINAL: Las relaciones FK problemáticas hacia la antigua tabla TRANSACCION han sido eliminadas
+-- al quitar dicha tabla y las sentencias ALTER TABLE correspondientes.
+-- La relación entre MOVIMIENTO_INVENTARIO y EMPLEADO se mantiene como estaba definida originalmente.
 
--- RELACIONES ENTRE MÓDULOS (Originales, aunque conceptualmente dudosas)
-
--- Se vuelven a incluir según solicitud de revertir todo excepto PRODUCTO.
--- Se recomienda revisar estas relaciones.
-ALTER TABLE NOMINA ADD CONSTRAINT fk_nomina_transaccion FOREIGN KEY (id_nomina) REFERENCES TRANSACCION(id_transaccion) ON DELETE CASCADE;
-ALTER TABLE VENTA ADD CONSTRAINT fk_venta_transaccion FOREIGN KEY (id_venta) REFERENCES TRANSACCION(id_transaccion) ON DELETE CASCADE;
-ALTER TABLE COMPRA ADD CONSTRAINT fk_compra_transaccion FOREIGN KEY (id_compra) REFERENCES TRANSACCION(id_transaccion) ON DELETE CASCADE;
-ALTER TABLE MOVIMIENTO_INVENTARIO ADD CONSTRAINT fk_mov_inv_empleado FOREIGN KEY (id_empleado) REFERENCES EMPLEADO(id_empleado) ON DELETE SET NULL; -- Esta FK ya estaba definida en CREATE TABLE MOVIMIENTO_INVENTARIO
-
-ALTER TABLE venta DROP FOREIGN KEY fk_venta_transaccion;
-
-ALTER TABLE VENTA MODIFY id_venta INT NOT NULL AUTO_INCREMENT;
-ALTER TABLE VENTA AUTO_INCREMENT = 100;
+-- La lógica para crear registros en MOVIMIENTO_FINANCIERO automáticamente desde VENTA, COMPRA, NOMINA
+-- y la lógica para actualizar PRODUCTO.stock y crear MOVIMIENTO_INVENTARIO desde COMPRA/DETALLE_COMPRA
+-- debe implementarse en el código de la aplicación (backend PHP).
